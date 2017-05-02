@@ -4,7 +4,7 @@
 
 # Site
 title: visualization
-subtitle:
+subtitle: coding share
 description: A visualization websit using Flask and D3 
 author: peakhell
 language:
@@ -69,4 +69,5 @@ theme: landscape
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type:
-theme: jekyll-theme-hacker
+theme: apollo
+
