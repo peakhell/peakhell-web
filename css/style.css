@@ -1324,7 +1324,7 @@ pre .javascript .function {
   margin: 50px 0;
 }
 .widget {
-  color: #777;
+  color: #5fc0c4;
   text-shadow: 0 1px #fff;
   background: #ddd;
   -webkit-box-shadow: 0 -1px 4px #ccc inset;
@@ -1332,6 +1332,7 @@ pre .javascript .function {
   border: 1px solid #ccc;
   padding: 15px;
   border-radius: 3px;
+  margin-top: 1px;
 }
 .widget a {
   color: #258fb8;

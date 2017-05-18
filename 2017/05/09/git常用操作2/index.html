@@ -5,16 +5,17 @@
   
   <title>git常用操作2 | Peakhell的个人网站</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="python,javascript">
+  <meta name="description" content="​    第一节主要介绍了git操作中常用到的添加,提交,版本切换,以及添加错误信息之后的撤销操作.这些操作都是在同一分支上的,这一节介绍一下git中一个非常重要的功能–分支.  什么是分支 设想你正在开发一个程序, 老板要你开发一个新的功能,几个小时后,你开发完成.并提交上git.这时你收到老板的消息,经费不足,新功能取消,虽然操蛋,但是你还是得照办,于是你把版本回退到上一个.等等,这时候新功能">
+<meta name="keywords" content="git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="git常用操作2">
 <meta property="og:url" content="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/index.html">
 <meta property="og:site_name" content="Peakhell的个人网站">
-<meta property="og:description" content="python,javascript">
-<meta property="og:updated_time" content="2017-05-09T07:19:46.628Z">
+<meta property="og:description" content="​    第一节主要介绍了git操作中常用到的添加,提交,版本切换,以及添加错误信息之后的撤销操作.这些操作都是在同一分支上的,这一节介绍一下git中一个非常重要的功能–分支.  什么是分支 设想你正在开发一个程序, 老板要你开发一个新的功能,几个小时后,你开发完成.并提交上git.这时你收到老板的消息,经费不足,新功能取消,虽然操蛋,但是你还是得照办,于是你把版本回退到上一个.等等,这时候新功能">
+<meta property="og:updated_time" content="2017-05-18T07:43:56.507Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="git常用操作2">
-<meta name="twitter:description" content="python,javascript">
+<meta name="twitter:description" content="​    第一节主要介绍了git操作中常用到的添加,提交,版本切换,以及添加错误信息之后的撤销操作.这些操作都是在同一分支上的,这一节介绍一下git中一个非常重要的功能–分支.  什么是分支 设想你正在开发一个程序, 老板要你开发一个新的功能,几个小时后,你开发完成.并提交上git.这时你收到老板的消息,经费不足,新功能取消,虽然操蛋,但是你还是得照办,于是你把版本回退到上一个.等等,这时候新功能">
   
     <link rel="alternate" href="/atom.xml" title="Peakhell的个人网站" type="application/atom+xml">
   
@@ -56,9 +57,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://peakhell.github.io/peakhell-web"></form>
@@ -73,6 +74,10 @@
   <time datetime="2017-05-09T07:19:46.000Z" itemprop="datePublished">2017-05-09</time>
 </a>
     
+  <div class="article-category">
+    <a class="article-category-link" href="/peakhell-web/categories/编程/">编程</a>
+  </div>
+
   </div>
   <div class="article-inner">
     
@@ -89,24 +94,55 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>​    第一节主要介绍了git操作中常用到的添加,提交,版本切换,以及添加错误信息之后的撤销操作.这些操作都是在同一分支上的,这一节介绍一下git中一个非常重要的功能–分支.</p>
+<ol>
+<li><p>什么是分支</p>
+<p>设想你正在开发一个程序, 老板要你开发一个新的功能,几个小时后,你开发完成.并提交上git.这时你收到老板的消息,经费不足,新功能取消,虽然操蛋,但是你还是得照办,于是你把版本回退到上一个.等等,这时候新功能我还想留着自己玩怎么办.git提供了分支来实现这个功能. 当开发一个项目新功能时, 我们可以开一个分支, 在分支上开发,这样就不会影响主分支,等确认开发完毕我们在和主分支进行合并.这样就很保险了.</p>
+</li>
+<li><p>创建新分支</p>
+<p>在git中创建新分支十分简单, 新建一个分支:</p>
+<p>​    <code>git branch dev</code>  </p>
+<p>新建并切换到建立的分支:</p>
+<p>​    <code>git checkout -b dev</code></p>
+<p>相当于下面两个命令:</p>
+<p>​    <code>gitbranch dev</code></p>
+<p>​    <code>git chekcout dev</code></p>
+<p>还有一个非常常用的命令是查看分支状态:</p>
+<p>​    <code>git branch</code></p>
+<p>这个命令将会列出所有的分支并指出当前处于哪个分支.</p>
+<p>​</p>
+<p>​</p>
+</li>
+</ol>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/" data-id="cj2turdzo0001sncm3o7bwhmw" class="article-share-link">Partager</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/" data-id="cj2u41gp80000e1cminqsp57r" class="article-share-link">Share</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/#disqus_thread" class="article-comment-link">Commentaires</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/#disqus_thread" class="article-comment-link">Comments</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/git/">git</a></li></ul>
+
     </footer>
   </div>
   
     
 <nav id="article-nav">
   
+    <a href="/peakhell-web/2017/05/18/写给快要毕业的自己/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          写给快要毕业的自己
+        
+      </div>
+    </a>
+  
   
     <a href="/peakhell-web/2017/05/05/git常用操作1/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Ancien</strong>
+      <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">git常用操作1</div>
     </a>
   
@@ -126,13 +162,10 @@
           <aside id="sidebar">
   
     
-
-  
-    
   <div class="widget-wrap">
-    <h3 class="widget-title">Mot-clés</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/peakhell-web/categories/杂想/">杂想</a></li><li class="category-list-item"><a class="category-list-link" href="/peakhell-web/categories/编程/">编程</a></li></ul>
     </div>
   </div>
 
@@ -140,9 +173,19 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/peakhell-web/tags/git/" style="font-size: 10px;">git</a>
+      <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a>
     </div>
   </div>
 
@@ -159,9 +202,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/peakhell-web/2017/05/18/写给快要毕业的自己/">写给快要毕业的自己</a>
+          </li>
         
           <li>
             <a href="/peakhell-web/2017/05/09/git常用操作2/">git常用操作2</a>
