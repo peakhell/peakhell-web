@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Peakhell的个人网站</title>
-  <subtitle>编程,围棋,二次元</subtitle>
+  <subtitle>编程,围棋,故事</subtitle>
   <link href="/peakhell-web/atom.xml" rel="self"/>
   
   <link href="https://peakhell.github.io/peakhell-web/"/>
