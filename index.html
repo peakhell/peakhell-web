@@ -68,6 +68,143 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Flask-Api-总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/peakhell-web/2017/06/09/Flask-Api-总结/" class="article-date">
+  <time datetime="2017-06-09T04:01:11.000Z" itemprop="datePublished">2017-06-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/peakhell-web/2017/06/09/Flask-Api-总结/">Flask Api 总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    最近使用flask做一个客户端的api接口, 学到了不少, 在这里总结用一下, 权当笔记.</p>
+<p>​    http 协议中共有8种请求方法, 常用的有6种,  如下图:</p>
+<ul>
+<li><strong>GET     请求获取Request-URI所标识的资源</strong></li>
+</ul>
+<ul>
+<li><strong>POST    在Request-URI所标识的资源后附加新的数据</strong></li>
+</ul>
+<ul>
+<li>HEAD    请求获取由Request-URI所标识的资源的响应消息报头</li>
+</ul>
+<ul>
+<li>PUT     请求服务器存储一个资源，并用Request-URI作为其标识</li>
+</ul>
+<ul>
+<li><p>DELETE  请求服务器删除Request-URI所标识的资源</p>
+</li>
+<li><p>OPTIONS 请求查询服务器的性能，或者查询与资源相关的选项和需求</p>
+<p>其中我们在开发过程中最常用的就是<strong>GET和POST</strong>请求方式.</p>
+<ol>
+<li>flask中处理GET请求</li>
+</ol>
+<p>首先我们要知道, GET请求是明文请求, 它会把所有的参数都拼接在URL后面. 我们可以用先看个例子.</p>
+<p><code>$.ajax({</code></p>
+<p>​    <code>url: &quot;/sample/download_report&quot;,</code></p>
+<p>​    <code>type: &quot;GET&quot;,</code> </p>
+<p>​    <code>data: {&quot;sampleNumber&quot;:1},</code> </p>
+<p>​    <code>success: function (data) {</code>  </p>
+<p>​    <code>data.save()</code> </p>
+<p>​    <code>}</code>   </p>
+<p><code>})</code> </p>
+<p>这是用jQuery写的使用GET请求方法向后端请求资源的方法. 可以看到我们构造了一个data, 并向url为”/sample/download_report”(相对地址)请求资源. 那么实际上上面的请求相当于</p>
+<p><code>/smaple/download_report?sampleNumber=1</code></p>
+<p>​    这一点要注意, 那么flask中怎么获取前端传来的请求数据呢.很简单, 以上面的代码为例, 我们要在flask中获取sampleNumber的话,只要</p>
+<p><code>from flask import request</code></p>
+<p><code>@api.route(&#39;/sample/download_report&#39;, methods=[&#39;GET&#39;])</code></p>
+<p><code>def sample_bind():</code></p>
+<p>​    <code>sampleNumber = request.args.get(&quot;sampleNumber&quot;)</code></p>
+</li>
+</ul>
+<p>关键的语句就是<code>request.args.get(&#39;sampleNumber&#39;)</code></p>
+<p>然后对输入的数据进行处理, 并返回就行了.</p>
+<pre><code>2.    flask中处理POST请求.
+</code></pre><p>处理POST请求稍微麻烦一点. 但falsk同样提供了方法供我们获取前端的数据.</p>
+<p>前端请求数据代码:</p>
+<p><code>var data = {    &quot;username&quot;: &quot;peakhell&quot;,</code> <code>&quot;sample_id&quot;: 1</code>  <code>};</code></p>
+<p><code>$.ajax({</code></p>
+<p>​    <code>url : &quot;/test&quot;,</code></p>
+<p>​    <code>type: &quot;POST&quot;,</code></p>
+<p>​    <code>headers: {</code></p>
+<p>​    <code>&#39;Content-Type&#39;:&#39;application/json&#39;    },</code>       </p>
+<p>​    <code>data: JSON.stringify(data),</code>    </p>
+<p>​    <code>success: function(data){        console.log(&quot;success&quot;)    }</code>    </p>
+<p><code>});</code></p>
+<p>首先声明请求方式为POST, 然后将字典数据json化.</p>
+<p>这个时候flask怎么获取POST的数据呢</p>
+<p><code>@api.route(&quot;/test&quot;, methods=[&#39;GET&#39;, &#39;POST&#39;])</code></p>
+<p><code>def test():</code></p>
+<p>​    <code>sample_id = request.json.get()&#39;sample_id&#39;)</code></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/" data-id="cj3y5t8o80000ujcmxdwyndi1" class="article-share-link">Share</a>
+      
+        <a href="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/flask/">flask</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-让D3绘制的力导向图发光" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/peakhell-web/2017/05/31/让D3绘制的力导向图发光/" class="article-date">
+  <time datetime="2017-05-31T09:57:19.000Z" itemprop="datePublished">2017-05-31</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/peakhell-web/2017/05/31/让D3绘制的力导向图发光/">让D3绘制的力导向图发光</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/" data-id="cj3y5t8on0006ujcm10hqawgk" class="article-share-link">Share</a>
+      
+        <a href="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-写给快要毕业的自己" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/peakhell-web/2017/05/18/写给快要毕业的自己/" class="article-date">
@@ -94,14 +231,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>​    不知不觉又到了毕业季, 不同于以往送别师兄师姐, 这一次,真的是自己毕业了.</p>
-<p>​    实习, 做毕设, 答辩, 就业派遣. 从3月份开始, 便开始忙碌着这些事情, 仿佛一切都是那么自然. 也是,我也不过是跟其他所有的毕业生一样, 忙碌着学校为我们做的安排罢了.  只是偶尔在学校开始忙完碌毕设等事情回到公司时, 总是有点不太想走, 而只要再过一个月, 这座我生活了4年的宿舍,也再也不会回去了. </p>
-<p>​    若是大一的时候就让我开始面对这些, 我一定会惊慌失措吧, 毕竟, 工作是如此遥远的事. 那时候我刚渡过漫长的暑假. </p>
+        <p>​    不知不觉中毕业季都快过去了. 和南区三傻聚完餐, 我便匆匆搭乘公交回到公司, 一如既往的拥挤, 空气中弥漫着空调与汽油的混合气味,不好闻但也可以忍受. 路上还坐反了一次公交, 以至于回到中科院宿舍时, 都已经快10点了.  第二天的早上8点, 又要开始一天的上班生活了, 写代码,看文档,查谷歌… 生活的轨迹似乎前所未有的明确. 除了这个月末最后一次的毕业典礼, 就再也没有什么事情要回深大处理了. 毕业, 就近在眼前了.</p>
+<p>​    虽然不是第一次毕业, 但这一次, 是特殊的. 不读研的我, 从此就要走向社会, 走上工作之路了. 说不上太多的伤感, 只是有时候会觉得要是回到大一该多好啊, 再去经历一次大学生活, 和朋友们一起去桂庙吃宵夜与烧烤, 聊一聊课程八卦与未来. 只是现在再聚, 恐怕再也没有之前的意气了.</p>
+<p>​        </p>
+<p>​    </p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/" data-id="cj3cpri9b0005zdcmai86itbo" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/" data-id="cj3y5t8om0005ujcmxl9y039i" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -165,7 +303,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/" data-id="cj3cpri940002zdcmozkg6xc6" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/" data-id="cj3y5t8og0003ujcm82dhf0t6" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -256,7 +394,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/" data-id="cj3cpri910001zdcm8kaylopi" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/" data-id="cj3y5t8oc0001ujcmairv0exv" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -289,7 +427,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/flask/">flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
     </div>
   </div>
 
@@ -299,7 +437,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a>
+      <a href="/peakhell-web/tags/flask/" style="font-size: 10px;">flask</a> <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a>
     </div>
   </div>
 
@@ -308,7 +446,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/05/">May 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/05/">May 2017</a></li></ul>
     </div>
   </div>
 
@@ -319,6 +457,14 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/peakhell-web/2017/06/09/Flask-Api-总结/">Flask Api 总结</a>
+          </li>
+        
+          <li>
+            <a href="/peakhell-web/2017/05/31/让D3绘制的力导向图发光/">让D3绘制的力导向图发光</a>
+          </li>
         
           <li>
             <a href="/peakhell-web/2017/05/18/写给快要毕业的自己/">写给快要毕业的自己</a>
