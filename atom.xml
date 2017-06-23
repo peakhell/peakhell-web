@@ -5,7 +5,7 @@
   <link href="/peakhell-web/atom.xml" rel="self"/>
   
   <link href="https://peakhell.github.io/peakhell-web/"/>
-  <updated>2017-06-15T08:24:12.313Z</updated>
+  <updated>2017-06-20T03:19:12.108Z</updated>
   <id>https://peakhell.github.io/peakhell-web/</id>
   
   <author>
@@ -14,6 +14,58 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一些常用的操作总结</title>
+    <link href="https://peakhell.github.io/peakhell-web/2017/06/19/%E4%B8%80%E4%BA%9B%E5%B8%B8%E7%94%A8%E7%9A%84%E6%93%8D%E4%BD%9C%E6%80%BB%E7%BB%93/"/>
+    <id>https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/</id>
+    <published>2017-06-19T09:43:36.000Z</published>
+    <updated>2017-06-20T03:19:12.108Z</updated>
+    
+    <content type="html"><![CDATA[<ol>
+<li><p>Python 中的virtualenv</p>
+<p>python中的虚拟环境是个好东西, 使用Python进行项目开发的过程中往往会有会安装很多第三方包, 如果全部都安装在全局变量中的话无疑会使全局环境变得混乱. 虚拟环境完美的解决了这一问题, 把项目中要安装的第三方包安装在虚拟环境中, 这样就可以保持全局变量的干净, 更重要的是, 如果要在另一台电脑中复现相同的环境, 也可以非常容易的复现出来.</p>
+<ul>
+<li>创建python3的虚拟环境</li>
+</ul>
+<p>使用virtualenv默认创建的是linux下的默认Python版本, 也就是python2.7版本, 像我这种用python3的就不能直接用默认的命令,要加一个参数.</p>
+<p><code>virtualenv -p python3 venv</code></p>
+<p>当然, 每次都这么打肯定烦死, 一个一劳永逸的方法是把python3 当做默认的python版本, 这样就不用每次都打这么长了. 把python3当成默认的python版本主要有两种方法, 一种是别名, 一种是直接修改系统的设置. 这里只说第一种. </p>
+<p>编辑自己home目录下的.bashrc文件, 并在最后加上一句</p>
+<p><code>alias python=&#39;python3&#39;</code></p>
+<p><img src="/peakhell-web/2017/06/19/一些常用的操作总结/alias.jpg" alt="alias"></p>
+<p>顺便安利一下这个alias别名命令, 非常好用, 可以把常用的冗长的命令起个剪短的别名, 方便使用.</p>
+<ul>
+<li>使用sudo时虚拟环境中的包检测不到</li>
+</ul>
+<p>有一次我要在80端口启动flask程序, 前1024位都是系统服务端口, 必须启用管理员权限才能打开. 于是我在虚拟环境中使用了如下的命令</p>
+<p><code>sudo python3 manager.py runserver --host 0.0.0.0 -p 80</code></p>
+<p>但是却报了如下的错误.</p>
+<p><img src="/peakhell-web/2017/06/19/一些常用的操作总结/models.jpg" alt="flask"></p>
+<p>flask包没有安装, 可是虚拟环境中已经安装了啊. 这时候要注意了, 你已经掉入了linux sudo中的一个小坑了. 先用下面的命令查看这条命令使用了哪个地方的python3</p>
+<p><img src="/peakhell-web/2017/06/19/一些常用的操作总结/envir.jpg" alt=""></p>
+</li>
+</ol>
+<p>​    可以看到, 当使用了sudo之后, 这时候的python是全局中的python, 而并不是虚拟环境中的python, 自然虚拟环境中的包就无法调用了.解决方法是将python换成虚拟环境中的python,可以这么写</p>
+<p>​    <code>sudo venv/bin/python3 manager.py runserver --host 0.0.0.0 -p 80</code></p>
+<p>​    </p>
+<ol>
+<li>​</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Python 中的virtualenv&lt;/p&gt;
+&lt;p&gt;python中的虚拟环境是个好东西, 使用Python进行项目开发的过程中往往会有会安装很多第三方包, 如果全部都安装在全局变量中的话无疑会使全局环境变得混乱. 虚拟环境完美的解决了这一问题, 把项目中
+    
+    </summary>
+    
+    
+      <category term="python git" scheme="https://peakhell.github.io/peakhell-web/tags/python-git/"/>
+    
+  </entry>
   
   <entry>
     <title>Flask Api 总结</title>

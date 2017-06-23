@@ -3,19 +3,23 @@
 <head>
   <meta charset="utf-8">
   
-  <title>写给快要毕业的自己 | Peakhell的个人网站</title>
+  <title>一些常用的操作总结 | Peakhell的个人网站</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="​    不知不觉中毕业季都快过去了. 和南区三傻聚完餐, 我便匆匆搭乘公交回到公司, 一如既往的拥挤, 空气中弥漫着空调与汽油的混合气味,不好闻但也可以忍受. 路上还坐反了一次公交, 以至于回到中科院宿舍时, 都已经快10点了.  第二天的早上8点, 又要开始一天的上班生活了, 写代码,看文档,查谷歌… 生活的轨迹似乎前所未有的明确. 除了这个月末最后一次的毕业典礼, 就再也没有什么事情要回深大">
-<meta name="keywords" content="故事">
+  <meta name="description" content="Python 中的virtualenv python中的虚拟环境是个好东西, 使用Python进行项目开发的过程中往往会有会安装很多第三方包, 如果全部都安装在全局变量中的话无疑会使全局环境变得混乱. 虚拟环境完美的解决了这一问题, 把项目中要安装的第三方包安装在虚拟环境中, 这样就可以保持全局变量的干净, 更重要的是, 如果要在另一台电脑中复现相同的环境, 也可以非常容易的复现出来.  创建p">
+<meta name="keywords" content="python git">
 <meta property="og:type" content="article">
-<meta property="og:title" content="写给快要毕业的自己">
-<meta property="og:url" content="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/index.html">
+<meta property="og:title" content="一些常用的操作总结">
+<meta property="og:url" content="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/index.html">
 <meta property="og:site_name" content="Peakhell的个人网站">
-<meta property="og:description" content="​    不知不觉中毕业季都快过去了. 和南区三傻聚完餐, 我便匆匆搭乘公交回到公司, 一如既往的拥挤, 空气中弥漫着空调与汽油的混合气味,不好闻但也可以忍受. 路上还坐反了一次公交, 以至于回到中科院宿舍时, 都已经快10点了.  第二天的早上8点, 又要开始一天的上班生活了, 写代码,看文档,查谷歌… 生活的轨迹似乎前所未有的明确. 除了这个月末最后一次的毕业典礼, 就再也没有什么事情要回深大">
-<meta property="og:updated_time" content="2017-06-05T12:59:33.981Z">
+<meta property="og:description" content="Python 中的virtualenv python中的虚拟环境是个好东西, 使用Python进行项目开发的过程中往往会有会安装很多第三方包, 如果全部都安装在全局变量中的话无疑会使全局环境变得混乱. 虚拟环境完美的解决了这一问题, 把项目中要安装的第三方包安装在虚拟环境中, 这样就可以保持全局变量的干净, 更重要的是, 如果要在另一台电脑中复现相同的环境, 也可以非常容易的复现出来.  创建p">
+<meta property="og:image" content="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/alias.jpg">
+<meta property="og:image" content="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/models.jpg">
+<meta property="og:image" content="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/envir.jpg">
+<meta property="og:updated_time" content="2017-06-20T03:19:12.108Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="写给快要毕业的自己">
-<meta name="twitter:description" content="​    不知不觉中毕业季都快过去了. 和南区三傻聚完餐, 我便匆匆搭乘公交回到公司, 一如既往的拥挤, 空气中弥漫着空调与汽油的混合气味,不好闻但也可以忍受. 路上还坐反了一次公交, 以至于回到中科院宿舍时, 都已经快10点了.  第二天的早上8点, 又要开始一天的上班生活了, 写代码,看文档,查谷歌… 生活的轨迹似乎前所未有的明确. 除了这个月末最后一次的毕业典礼, 就再也没有什么事情要回深大">
+<meta name="twitter:title" content="一些常用的操作总结">
+<meta name="twitter:description" content="Python 中的virtualenv python中的虚拟环境是个好东西, 使用Python进行项目开发的过程中往往会有会安装很多第三方包, 如果全部都安装在全局变量中的话无疑会使全局环境变得混乱. 虚拟环境完美的解决了这一问题, 把项目中要安装的第三方包安装在虚拟环境中, 这样就可以保持全局变量的干净, 更重要的是, 如果要在另一台电脑中复现相同的环境, 也可以非常容易的复现出来.  创建p">
+<meta name="twitter:image" content="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/alias.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Peakhell的个人网站" type="application/atom+xml">
   
@@ -68,16 +72,12 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-写给快要毕业的自己" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-一些常用的操作总结" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/peakhell-web/2017/05/18/写给快要毕业的自己/" class="article-date">
-  <time datetime="2017-05-18T03:46:24.000Z" itemprop="datePublished">2017-05-18</time>
+    <a href="/peakhell-web/2017/06/19/一些常用的操作总结/" class="article-date">
+  <time datetime="2017-06-19T09:43:36.000Z" itemprop="datePublished">2017-06-19</time>
 </a>
     
-  <div class="article-category">
-    <a class="article-category-link" href="/peakhell-web/categories/杂想/">杂想</a>
-  </div>
-
   </div>
   <div class="article-inner">
     
@@ -86,7 +86,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      写给快要毕业的自己
+      一些常用的操作总结
     </h1>
   
 
@@ -94,20 +94,46 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>​    不知不觉中毕业季都快过去了. 和南区三傻聚完餐, 我便匆匆搭乘公交回到公司, 一如既往的拥挤, 空气中弥漫着空调与汽油的混合气味,不好闻但也可以忍受. 路上还坐反了一次公交, 以至于回到中科院宿舍时, 都已经快10点了.  第二天的早上8点, 又要开始一天的上班生活了, 写代码,看文档,查谷歌… 生活的轨迹似乎前所未有的明确. 除了这个月末最后一次的毕业典礼, 就再也没有什么事情要回深大处理了. 毕业, 就近在眼前了.</p>
-<p>​    虽然不是第一次毕业, 但这一次, 是特殊的. 不读研的我, 从此就要走向社会, 走上工作之路了. 说不上太多的伤感, 只是有时候会觉得要是回到大一该多好啊, 再去经历一次大学生活, 和朋友们一起去桂庙吃宵夜与烧烤, 聊一聊课程八卦与未来. 只是现在再聚, 恐怕再也没有之前的意气了.</p>
-<p>​        </p>
+        <ol>
+<li><p>Python 中的virtualenv</p>
+<p>python中的虚拟环境是个好东西, 使用Python进行项目开发的过程中往往会有会安装很多第三方包, 如果全部都安装在全局变量中的话无疑会使全局环境变得混乱. 虚拟环境完美的解决了这一问题, 把项目中要安装的第三方包安装在虚拟环境中, 这样就可以保持全局变量的干净, 更重要的是, 如果要在另一台电脑中复现相同的环境, 也可以非常容易的复现出来.</p>
+<ul>
+<li>创建python3的虚拟环境</li>
+</ul>
+<p>使用virtualenv默认创建的是linux下的默认Python版本, 也就是python2.7版本, 像我这种用python3的就不能直接用默认的命令,要加一个参数.</p>
+<p><code>virtualenv -p python3 venv</code></p>
+<p>当然, 每次都这么打肯定烦死, 一个一劳永逸的方法是把python3 当做默认的python版本, 这样就不用每次都打这么长了. 把python3当成默认的python版本主要有两种方法, 一种是别名, 一种是直接修改系统的设置. 这里只说第一种. </p>
+<p>编辑自己home目录下的.bashrc文件, 并在最后加上一句</p>
+<p><code>alias python=&#39;python3&#39;</code></p>
+<p><img src="/peakhell-web/2017/06/19/一些常用的操作总结/alias.jpg" alt="alias"></p>
+<p>顺便安利一下这个alias别名命令, 非常好用, 可以把常用的冗长的命令起个剪短的别名, 方便使用.</p>
+<ul>
+<li>使用sudo时虚拟环境中的包检测不到</li>
+</ul>
+<p>有一次我要在80端口启动flask程序, 前1024位都是系统服务端口, 必须启用管理员权限才能打开. 于是我在虚拟环境中使用了如下的命令</p>
+<p><code>sudo python3 manager.py runserver --host 0.0.0.0 -p 80</code></p>
+<p>但是却报了如下的错误.</p>
+<p><img src="/peakhell-web/2017/06/19/一些常用的操作总结/models.jpg" alt="flask"></p>
+<p>flask包没有安装, 可是虚拟环境中已经安装了啊. 这时候要注意了, 你已经掉入了linux sudo中的一个小坑了. 先用下面的命令查看这条命令使用了哪个地方的python3</p>
+<p><img src="/peakhell-web/2017/06/19/一些常用的操作总结/envir.jpg" alt=""></p>
+</li>
+</ol>
+<p>​    可以看到, 当使用了sudo之后, 这时候的python是全局中的python, 而并不是虚拟环境中的python, 自然虚拟环境中的包就无法调用了.解决方法是将python换成虚拟环境中的python,可以这么写</p>
+<p>​    <code>sudo venv/bin/python3 manager.py runserver --host 0.0.0.0 -p 80</code></p>
 <p>​    </p>
+<ol>
+<li>​</li>
+</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/" data-id="cj498gxzw000733cmponzvp0e" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/" data-id="cj498gxzt000433cmlmhk1x43" class="article-share-link">Share</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/#disqus_thread" class="article-comment-link">Comments</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/python-git/">python git</a></li></ul>
 
     </footer>
   </div>
@@ -115,19 +141,10 @@
     
 <nav id="article-nav">
   
-    <a href="/peakhell-web/2017/05/31/让D3绘制的力导向图发光/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          让D3绘制的力导向图发光
-        
-      </div>
-    </a>
   
-  
-    <a href="/peakhell-web/2017/05/09/git常用操作2/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/peakhell-web/2017/06/09/Flask-Api-总结/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">git常用操作2</div>
+      <div class="article-nav-title">Flask Api 总结</div>
     </a>
   
 </nav>
@@ -257,7 +274,7 @@
 <script>
   var disqus_shortname = 'https-peakhell-github-io-peakhell-web';
   
-  var disqus_url = 'https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/';
+  var disqus_url = 'https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/';
   
   (function(){
     var dsq = document.createElement('script');
