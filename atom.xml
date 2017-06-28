@@ -5,7 +5,7 @@
   <link href="/peakhell-web/atom.xml" rel="self"/>
   
   <link href="https://peakhell.github.io/peakhell-web/"/>
-  <updated>2017-06-20T03:19:12.108Z</updated>
+  <updated>2017-06-28T02:30:08.211Z</updated>
   <id>https://peakhell.github.io/peakhell-web/</id>
   
   <author>
@@ -14,6 +14,75 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>jQuery笔记</title>
+    <link href="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery%E7%AC%94%E8%AE%B0/"/>
+    <id>https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/</id>
+    <published>2017-06-27T07:27:35.000Z</published>
+    <updated>2017-06-28T02:30:08.211Z</updated>
+    
+    <content type="html"><![CDATA[<p>​    jQuery非常好用, 但是也有一些地方要多加留意, 这里总结一下我犯过错误, 权当前车之鉴, 希望各位不要犯和我一样的错.</p>
+<ol>
+<li>判断元素是否存在</li>
+</ol>
+<p>判断元素是否存在在前端中应该是常见的操作, 在使用jQuery进行判断时要多加小心, 先看下面的代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ($(<span class="string">'.fly'</span>))&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'i can fly'</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的代码看似没有问题, 但由于$(‘.fly’)返回的永远是一个对象, 所以不管<code>.fly</code>存不存在, 判断永远都是True. 正确的判断方法应该是根据元素的长度来判断.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ($(<span class="string">'.fly'</span>)&gt;<span class="number">0</span>):</div><div class="line">	<span class="built_in">console</span>.log(<span class="string">'i can fly'</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>常见的Dom操作</li>
+</ol>
+<p>Dom操作主要是对元素节点进行创建, 插入, 删除, 复制, 替换等操作, jQuery提供了一系列的方法方便的对节点进行操作, 但由于Dom操作繁琐复杂, 这里做一个常用Dom操作的总结. 以系统性的学习Dom操作. 为方便理解, 这里以下面的html代码为例进行讲解.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"go"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>围棋国手<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"柯洁"</span>&gt;</span>柯洁<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"唐韦星"</span>&gt;</span>唐韦星<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"李世石"</span>&gt;</span>李世石<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"test"</span>&gt;</span>test<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<ul>
+<li>创建元素节点</li>
+</ul>
+<p>jQuery使用工厂函数$()来创建元素节点. 格式是这样的 </p>
+<p><code>$(html)</code></p>
+<p>例如在创建两个li标签, 可以这么写</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> $li1 = $(<span class="string">"&lt;li&gt;时越&lt;/li&gt;"</span>)</div><div class="line"><span class="keyword">var</span> $li2 = $(<span class="string">"&lt;li&gt;姜东润&lt;/li&gt;"</span>)</div></pre></td></tr></table></figure>
+<p>注意这里的变量命, 前面有个$, 这是为了区分jQuery对象与Dom对象. 上面的代码创建了两个包含文本的li标签,  我们还可以直接创建带有属性值的标签.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> $li3 = $(<span class="string">"&lt;li class='china' title='胡跃峰'&gt;胡跃峰&lt;/li&gt;"</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li><p>插入元素节点</p>
+<p>插入元素节点有很多种方法, 一般而言用的最多的是以下这几个:</p>
+</li>
+</ul>
+<p><code>append()</code> : 向每个匹配的元素中添加内容. 添加的元素在尾部 </p>
+<p><code>appendTo()</code>: 将所有匹配的元素追加到指定的元素. 添加的元素在尾部</p>
+<p><code>pretend()</code> : 向每个匹配的元素中添加内容. 添加的元素在头部</p>
+<p><code>pretendTo()</code> : 将所有匹配的元素添加到指定的元素中, 添加的元素在头部.</p>
+<p><code>after()</code>: 在每个匹配的元素之后插入内容</p>
+<p><code>before()</code>: 在每个匹配的元素之前插入内容</p>
+<p>​    当然jQuery还提供了很多方法供我们插入Dom元素. 但最常见的操作主要还是以上集中, 下面仔细介绍每一种方法的用法.</p>
+<p><strong>append()</strong></p>
+<p>​    append()应该是用的最多插入元素节点的方法了, 其用法也很简单, 先用jQuery选择器选中元素, 然后使用append()方法添加需要添加的元素就可以了.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"ul"</span>).append($li1)</div><div class="line">$(<span class="string">"ul"</span>).append($li2)</div></pre></td></tr></table></figure>
+<p>​    上面的代码会在ul标签的内部后面追加两个li标签. 在chrome中可以看到html代码变成了</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"go"</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">h2</span>&gt;</span>围棋国手<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"柯洁"</span>&gt;</span>柯洁<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"唐韦星"</span>&gt;</span>唐韦星<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"李世石"</span>&gt;</span>李世石<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>时越<span class="tag">&lt;/<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">li</span>&gt;</span>姜东润<span class="tag">&lt;/<span class="name">li</span>&gt;</span><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"test"</span>&gt;</span>test<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><strong>appendTo</strong></p>
+<p>​    在插入元素的功能上与append一致, 但用法却正好相反, 看个例子就明白了.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$li1.appendTo(<span class="string">"ul"</span>)</div><div class="line">$li2.appendTo(<span class="string">"ul"</span>)</div></pre></td></tr></table></figure>
+<p>生成代码与上个例子的append相同, 但与append的用法不同.两相比较就明白了.</p>
+<p><strong>pretend</strong></p>
+<p>​    </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;​    jQuery非常好用, 但是也有一些地方要多加留意, 这里总结一下我犯过错误, 权当前车之鉴, 希望各位不要犯和我一样的错.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;判断元素是否存在&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;判断元素是否存在在前端中应该是常见的操作, 在使用jQuery进行
+    
+    </summary>
+    
+    
+      <category term="jQuery 前端" scheme="https://peakhell.github.io/peakhell-web/tags/jQuery-%E5%89%8D%E7%AB%AF/"/>
+    
+  </entry>
   
   <entry>
     <title>一些常用的操作总结</title>
@@ -168,11 +237,11 @@
     <link href="https://peakhell.github.io/peakhell-web/2017/05/18/%E5%86%99%E7%BB%99%E5%BF%AB%E8%A6%81%E6%AF%95%E4%B8%9A%E7%9A%84%E8%87%AA%E5%B7%B1/"/>
     <id>https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/</id>
     <published>2017-05-18T03:46:24.000Z</published>
-    <updated>2017-06-05T12:59:33.981Z</updated>
+    <updated>2017-06-27T02:16:55.575Z</updated>
     
     <content type="html"><![CDATA[<p>​    不知不觉中毕业季都快过去了. 和南区三傻聚完餐, 我便匆匆搭乘公交回到公司, 一如既往的拥挤, 空气中弥漫着空调与汽油的混合气味,不好闻但也可以忍受. 路上还坐反了一次公交, 以至于回到中科院宿舍时, 都已经快10点了.  第二天的早上8点, 又要开始一天的上班生活了, 写代码,看文档,查谷歌… 生活的轨迹似乎前所未有的明确. 除了这个月末最后一次的毕业典礼, 就再也没有什么事情要回深大处理了. 毕业, 就近在眼前了.</p>
-<p>​    虽然不是第一次毕业, 但这一次, 是特殊的. 不读研的我, 从此就要走向社会, 走上工作之路了. 说不上太多的伤感, 只是有时候会觉得要是回到大一该多好啊, 再去经历一次大学生活, 和朋友们一起去桂庙吃宵夜与烧烤, 聊一聊课程八卦与未来. 只是现在再聚, 恐怕再也没有之前的意气了.</p>
-<p>​        </p>
+<p>​    虽然不是第一次毕业, 但这一次, 是特殊的. 不读研的我, 从此就要走向社会, 走上工作之路了. 说不上太多的伤感, 只是有时候会觉得要是回到大一该多好啊, 再去经历一次大学生活, 和朋友们一起去桂庙吃宵夜与烧烤, 聊一聊课程八卦与未来. 只是现在再聚, 恐怕再也没有之前的意气了. 临近毕业, 我们仍是嘻嘻哈哈的打着游戏互怼, 煲粥聊天玩手机. 在1627这个宿舍, 好像我们都可以毫无顾忌的展示自己最慵懒而自然的状态. 只是日后, 不知何时还能聚在一起开黑玩游戏了.</p>
+<p>​    就这样吧, 想起江南在&lt;此间的少年&gt;中开篇所写道:  而当记忆中的场景再次出现在眼前的时候，我忽然意识到，终有一天我们的过往都会被讲述成一个故事，这个故事可以有很多种讲法，可以有不同的主角，不同的喜悦或者悲伤，但无论怎样，所有的故事都始于一个同样的开头，喧嚣或沉默着的每一个人，都将各怀心事地登场。于是我回忆起那一年我们的相逢，这是一个故事所需要的开场。</p>
 <p>​    </p>
 ]]></content>
     
