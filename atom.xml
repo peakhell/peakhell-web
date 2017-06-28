@@ -186,10 +186,10 @@
     <link href="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-%E6%80%BB%E7%BB%93/"/>
     <id>https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/</id>
     <published>2017-06-09T04:01:11.000Z</published>
-    <updated>2017-06-28T07:36:16.755Z</updated>
+    <updated>2017-06-28T07:46:39.290Z</updated>
     
     <content type="html"><![CDATA[<p>​    最近使用flask做一个客户端的api接口, 学到了不少, 在这里总结用一下, 权当笔记.</p>
-<p>​    http 协议中共有8种请求方法, 常用的有6种,  如下图:</p>
+<p>​    http 协议中共有8种请求方法, 常用的有6种,  如下所示:</p>
 <ul>
 <li><strong>GET     请求获取Request-URI所标识的资源</strong></li>
 </ul>
@@ -211,7 +211,7 @@
 <li>flask中处理GET请求</li>
 </ol>
 <p>首先我们要知道, GET请求是明文请求, 它会把所有的参数都拼接在URL后面. 我们可以用先看个例子.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">$.ajax(&#123;</div><div class="line"></div><div class="line">	<span class="attr">url</span>: <span class="string">"/sample/download_report"</span>,</div><div class="line"></div><div class="line">	<span class="attr">type</span>: <span class="string">"GET"</span>, </div><div class="line"></div><div class="line">	<span class="attr">data</span>: &#123;<span class="string">"sampleNumber"</span>:<span class="number">1</span>&#125;, </div><div class="line"></div><div class="line">	<span class="attr">success</span>: <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;  </div><div class="line"></div><div class="line">	data.save() </div><div class="line"></div><div class="line">	&#125;   </div><div class="line"></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$.ajax(&#123;</div><div class="line">	<span class="attr">url</span>: <span class="string">"/sample/download_report"</span>,</div><div class="line">	<span class="attr">type</span>: <span class="string">"GET"</span>, </div><div class="line">	<span class="attr">data</span>: &#123;<span class="string">"sampleNumber"</span>:<span class="number">1</span>&#125;, </div><div class="line">	<span class="attr">success</span>: <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;  </div><div class="line">	data.save() </div><div class="line">	&#125;   </div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <p>这是用jQuery写的使用GET请求方法向后端请求资源的方法. 可以看到我们构造了一个data, 并向url为”/sample/download_report”(相对地址)请求资源. 那么实际上上面的请求相当于</p>
 <p><code>/smaple/download_report?sampleNumber=1</code></p>
 <p>​    这一点要注意, 那么flask中怎么获取前端传来的请求数据呢.很简单, 以上面的代码为例, 我们要在flask中获取sampleNumber的话,只要</p>
@@ -220,26 +220,29 @@
 </ul>
 <p>关键的语句就是<code>request.args.get(&#39;sampleNumber&#39;)</code></p>
 <p>然后对输入的数据进行处理, 并返回就行了.</p>
-<pre><code>2.    Flask中处理POST请求.
-</code></pre><p>处理POST请求稍微麻烦一点. 但falsk同样提供了方法供我们获取前端的数据.</p>
+<ol>
+<li>Flask中处理POST请求.</li>
+</ol>
+<p>处理POST请求稍微麻烦一点. 但falsk同样提供了方法供我们获取前端的数据.</p>
 <p>前端请求数据代码:</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> data = &#123;    <span class="string">"username"</span>: <span class="string">"peakhell"</span>, <span class="string">"sample_id"</span>: <span class="number">1</span>  &#125;;</div><div class="line">$.ajax(&#123;</div><div class="line">	<span class="attr">url</span> : <span class="string">"/test"</span>,</div><div class="line">	<span class="attr">type</span>: <span class="string">"POST"</span>,</div><div class="line">	<span class="attr">headers</span>: &#123;</div><div class="line">	<span class="string">'Content-Type'</span>:<span class="string">'application/json'</span>    &#125;,       </div><div class="line">	<span class="attr">data</span>: <span class="built_in">JSON</span>.stringify(data),    </div><div class="line">	<span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;        <span class="built_in">console</span>.log(<span class="string">"success"</span>)    &#125;    </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>首先声明请求方式为POST, 然后将字典数据json化.</p>
 <p>这个时候flask怎么获取POST的数据呢</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@api.route("/test", methods=['GET', 'POST'])</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></div><div class="line"></div><div class="line">	sample_id = request.json.get()<span class="string">'sample_id'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@api.route("/test", methods=['GET', 'POST'])</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></div><div class="line">	sample_id = request.json.get(<span class="string">'sample_id'</span>)</div></pre></td></tr></table></figure>
+<p>使用request.json.get()获取json数据即可.</p>
 ]]></content>
     
     <summary type="html">
     
       &lt;p&gt;​    最近使用flask做一个客户端的api接口, 学到了不少, 在这里总结用一下, 权当笔记.&lt;/p&gt;
-&lt;p&gt;​    http 协议中共有8种请求方法, 常用的有6种,  如下图:&lt;/p&gt;
+&lt;p&gt;​    http 协议中共有8种请求方法, 常用的有6种,  如下所示:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;GET     请求获取Request-U
+&lt;li&gt;&lt;strong&gt;GET     请求获取Request-
     
     </summary>
     
     
-      <category term="flask" scheme="https://peakhell.github.io/peakhell-web/tags/flask/"/>
+      <category term="flask python" scheme="https://peakhell.github.io/peakhell-web/tags/flask-python/"/>
     
   </entry>
   
