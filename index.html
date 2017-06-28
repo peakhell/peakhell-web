@@ -55,9 +55,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://peakhell.github.io/peakhell-web"></form>
@@ -156,14 +156,38 @@
 <ul>
 <li>删除元素节点</li>
 </ul>
+<p>元素节点的删除主要有三种方法, remove, detach 和empty.</p>
+<p><strong>remove</strong></p>
+<p>remove方法是从DOM中删除所有匹配的元素</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"ul&gt;li"</span>).remove()</div></pre></td></tr></table></figure>
+<p>如上面的代码会把页面中所有的li标签删除,  当每个节点用remove方法删除后, 该节点所包含的后代节点将同时被删除. 还有一点很有趣, 就是该方法会返回指向删除节点的引用, 也就是说, 我们后续如果需要的话, 还是可以调用的.看下面的代码.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> $li = $(<span class="string">"ul&gt;li:eq(1)"</span>).remove()  <span class="comment">// 删除第二个li标签</span></div><div class="line">$li.appendTo(<span class="string">"ul"</span>)				     <span class="comment">// 把删除的标签添加到ul标签的内部</span></div></pre></td></tr></table></figure>
+<p>你会发现被删除的元素还是可以被引用的. </p>
+<p>还有一点需要注意的是, remove 是可以带参数的, 其含义是通过传递的参数进行选择性的删除元素.例如我们删除页面中title不为柯洁的标签可以这么写</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"ul li"</span>).remove(<span class="string">"li[title!=柯洁]"</span>)</div></pre></td></tr></table></figure>
+<p><strong>detach</strong></p>
+<p>和remove一样, 也是从DOM中删除所有匹配的元素, 并且节点仍是可以引用的. 和remove的不同点只有一个, 那就是使用detach删除的元素, 其中所有绑定的时间, 附加的数据都会保留下来. 而remove则不会.下面的例子可以说明这一点.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"ul li"</span>).on(<span class="string">"click"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</div><div class="line">  	$(<span class="keyword">this</span>).css(<span class="string">"color"</span>,<span class="string">"#888"</span>)</div><div class="line">&#125;)            <span class="comment">// 给li标签绑定事件</span></div><div class="line">$li = $(<span class="string">"ul li"</span>).detach()  <span class="comment">// 使用detach 删除元素</span></div><div class="line">$li.appendTo(<span class="string">"ul"</span>)         <span class="comment">// 把删除的元素重新添加到ul标签内部</span></div></pre></td></tr></table></figure>
+<p>你会发现li标签绑定的事件仍是起作用的, 这说明detach方法返回的对象会保留标签绑定的方法以及附加的数据, 如果把上例中的detach 换成 remove, 则li 标签的事件不会起作用.这就是detach和remove 这两个方法之间的区别.</p>
+<p><strong>empty</strong></p>
+<p>准确点来说, empty是清空操作, empty方法会把选中元素的所有后代节点清空. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"ul"</span>).empty</div></pre></td></tr></table></figure>
+<p>上面的方法会把ul内部的元素节点全部清空. </p>
+<ul>
+<li>元素节点的复制 </li>
+</ul>
+<p>节点的复制也是DOM操作中常见的一个操作. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"ul li:eq(1)"</span>).clone().appendTo(<span class="string">"ul"</span>)</div></pre></td></tr></table></figure>
+<p>上面的代码会复制第二个li标签并添加到ul内部. 需要注意的是这样写复制的节点不具有任何行为和附加数据, 若要继承原始节点所拥有的事件行为或附加数据, 应在clone方法中添加参数true</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(&quot;ul li:eq(1)&quot;).clone(true).appendTo(&quot;ul&quot;)</div></pre></td></tr></table></figure>
 <p>​    </p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/" data-id="cj4gffknp0006a1cmtiwnrffw" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/" data-id="cj4gonl3v0005ftcmb3b3icyg" class="article-share-link">Partager</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/#disqus_thread" class="article-comment-link">Commentaires</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/jQuery-前端/">jQuery 前端</a></li></ul>
@@ -231,9 +255,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/" data-id="cj4gffknq0007a1cmengvrw4e" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/" data-id="cj4gonl3w0006ftcmo1xhoxp7" class="article-share-link">Partager</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/#disqus_thread" class="article-comment-link">Commentaires</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/python-git/">python git</a></li></ul>
@@ -330,9 +354,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/" data-id="cj4gffknf0001a1cmqrgb9r5y" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/" data-id="cj4gonl3h0000ftcmu0d2sql8" class="article-share-link">Partager</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/#disqus_thread" class="article-comment-link">Commentaires</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/flask/">flask</a></li></ul>
@@ -370,9 +394,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/" data-id="cj4gffknu000ca1cmhsqvf1c4" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/" data-id="cj4gonl41000eftcmiwafajar" class="article-share-link">Partager</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/#disqus_thread" class="article-comment-link">Commentaires</a>
       
       
     </footer>
@@ -416,9 +440,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/" data-id="cj4gffkns000aa1cm1wx8gtoq" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/" data-id="cj4gonl3x0009ftcmpfs8ojsl" class="article-share-link">Partager</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/#disqus_thread" class="article-comment-link">Commentaires</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
@@ -480,9 +504,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/" data-id="cj4gffknn0004a1cmxx9672nd" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/" data-id="cj4gonl3p0003ftcmbs3nzsmx" class="article-share-link">Partager</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/#disqus_thread" class="article-comment-link">Commentaires</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/git/">git</a></li></ul>
@@ -571,9 +595,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/" data-id="cj4gffknh0002a1cmt3gb8bvc" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/" data-id="cj4gonl3l0001ftcm8kjjr1eo" class="article-share-link">Partager</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/#disqus_thread" class="article-comment-link">Commentaires</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/git/">git</a></li></ul>
@@ -592,7 +616,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
+    <h3 class="widget-title">Catégories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/peakhell-web/categories/杂想/">杂想</a></li><li class="category-list-item"><a class="category-list-link" href="/peakhell-web/categories/编程/">编程</a></li></ul>
     </div>
@@ -602,7 +626,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
+    <h3 class="widget-title">Mot-clés</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/flask/">flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/jQuery-前端/">jQuery 前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/python-git/">python git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
     </div>
@@ -612,7 +636,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">Nuage de mot-clés</h3>
     <div class="widget tagcloud">
       <a href="/peakhell-web/tags/flask/" style="font-size: 10px;">flask</a> <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/jQuery-前端/" style="font-size: 10px;">jQuery 前端</a> <a href="/peakhell-web/tags/python-git/" style="font-size: 10px;">python git</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a>
     </div>
@@ -631,7 +655,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         

@@ -5,7 +5,7 @@
   <link href="/peakhell-web/atom.xml" rel="self"/>
   
   <link href="https://peakhell.github.io/peakhell-web/"/>
-  <updated>2017-06-28T03:13:32.428Z</updated>
+  <updated>2017-06-28T07:31:36.565Z</updated>
   <id>https://peakhell.github.io/peakhell-web/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery%E7%AC%94%E8%AE%B0/"/>
     <id>https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/</id>
     <published>2017-06-27T07:27:35.000Z</published>
-    <updated>2017-06-28T03:13:32.428Z</updated>
+    <updated>2017-06-28T07:31:36.565Z</updated>
     
     <content type="html"><![CDATA[<p>​    jQuery非常好用, 但是也有一些地方要多加留意, 这里总结一下我犯过错误, 权当前车之鉴, 希望各位不要犯和我一样的错.</p>
 <ol>
@@ -88,6 +88,30 @@
 <ul>
 <li>删除元素节点</li>
 </ul>
+<p>元素节点的删除主要有三种方法, remove, detach 和empty.</p>
+<p><strong>remove</strong></p>
+<p>remove方法是从DOM中删除所有匹配的元素</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"ul&gt;li"</span>).remove()</div></pre></td></tr></table></figure>
+<p>如上面的代码会把页面中所有的li标签删除,  当每个节点用remove方法删除后, 该节点所包含的后代节点将同时被删除. 还有一点很有趣, 就是该方法会返回指向删除节点的引用, 也就是说, 我们后续如果需要的话, 还是可以调用的.看下面的代码.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> $li = $(<span class="string">"ul&gt;li:eq(1)"</span>).remove()  <span class="comment">// 删除第二个li标签</span></div><div class="line">$li.appendTo(<span class="string">"ul"</span>)				     <span class="comment">// 把删除的标签添加到ul标签的内部</span></div></pre></td></tr></table></figure>
+<p>你会发现被删除的元素还是可以被引用的. </p>
+<p>还有一点需要注意的是, remove 是可以带参数的, 其含义是通过传递的参数进行选择性的删除元素.例如我们删除页面中title不为柯洁的标签可以这么写</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"ul li"</span>).remove(<span class="string">"li[title!=柯洁]"</span>)</div></pre></td></tr></table></figure>
+<p><strong>detach</strong></p>
+<p>和remove一样, 也是从DOM中删除所有匹配的元素, 并且节点仍是可以引用的. 和remove的不同点只有一个, 那就是使用detach删除的元素, 其中所有绑定的时间, 附加的数据都会保留下来. 而remove则不会.下面的例子可以说明这一点.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"ul li"</span>).on(<span class="string">"click"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</div><div class="line">  	$(<span class="keyword">this</span>).css(<span class="string">"color"</span>,<span class="string">"#888"</span>)</div><div class="line">&#125;)            <span class="comment">// 给li标签绑定事件</span></div><div class="line">$li = $(<span class="string">"ul li"</span>).detach()  <span class="comment">// 使用detach 删除元素</span></div><div class="line">$li.appendTo(<span class="string">"ul"</span>)         <span class="comment">// 把删除的元素重新添加到ul标签内部</span></div></pre></td></tr></table></figure>
+<p>你会发现li标签绑定的事件仍是起作用的, 这说明detach方法返回的对象会保留标签绑定的方法以及附加的数据, 如果把上例中的detach 换成 remove, 则li 标签的事件不会起作用.这就是detach和remove 这两个方法之间的区别.</p>
+<p><strong>empty</strong></p>
+<p>准确点来说, empty是清空操作, empty方法会把选中元素的所有后代节点清空. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"ul"</span>).empty</div></pre></td></tr></table></figure>
+<p>上面的方法会把ul内部的元素节点全部清空. </p>
+<ul>
+<li>元素节点的复制 </li>
+</ul>
+<p>节点的复制也是DOM操作中常见的一个操作. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"ul li:eq(1)"</span>).clone().appendTo(<span class="string">"ul"</span>)</div></pre></td></tr></table></figure>
+<p>上面的代码会复制第二个li标签并添加到ul内部. 需要注意的是这样写复制的节点不具有任何行为和附加数据, 若要继承原始节点所拥有的事件行为或附加数据, 应在clone方法中添加参数true</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(&quot;ul li:eq(1)&quot;).clone(true).appendTo(&quot;ul&quot;)</div></pre></td></tr></table></figure>
 <p>​    </p>
 ]]></content>
     
