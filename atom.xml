@@ -131,11 +131,11 @@
   </entry>
   
   <entry>
-    <title>一些常用的操作总结</title>
+    <title>python3 虚拟环境常用操作</title>
     <link href="https://peakhell.github.io/peakhell-web/2017/06/19/%E4%B8%80%E4%BA%9B%E5%B8%B8%E7%94%A8%E7%9A%84%E6%93%8D%E4%BD%9C%E6%80%BB%E7%BB%93/"/>
     <id>https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/</id>
     <published>2017-06-19T09:43:36.000Z</published>
-    <updated>2017-06-20T03:19:12.108Z</updated>
+    <updated>2017-06-28T07:39:42.478Z</updated>
     
     <content type="html"><![CDATA[<ol>
 <li><p>Python 中的virtualenv</p>
@@ -144,28 +144,27 @@
 <li>创建python3的虚拟环境</li>
 </ul>
 <p>使用virtualenv默认创建的是linux下的默认Python版本, 也就是python2.7版本, 像我这种用python3的就不能直接用默认的命令,要加一个参数.</p>
-<p><code>virtualenv -p python3 venv</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">virtualenv -p python3 venv</div></pre></td></tr></table></figure>
 <p>当然, 每次都这么打肯定烦死, 一个一劳永逸的方法是把python3 当做默认的python版本, 这样就不用每次都打这么长了. 把python3当成默认的python版本主要有两种方法, 一种是别名, 一种是直接修改系统的设置. 这里只说第一种. </p>
 <p>编辑自己home目录下的.bashrc文件, 并在最后加上一句</p>
-<p><code>alias python=&#39;python3&#39;</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">alias python='python3'</div></pre></td></tr></table></figure>
+<p>​</p>
 <p><img src="/peakhell-web/2017/06/19/一些常用的操作总结/alias.jpg" alt="alias"></p>
 <p>顺便安利一下这个alias别名命令, 非常好用, 可以把常用的冗长的命令起个剪短的别名, 方便使用.</p>
 <ul>
 <li>使用sudo时虚拟环境中的包检测不到</li>
 </ul>
 <p>有一次我要在80端口启动flask程序, 前1024位都是系统服务端口, 必须启用管理员权限才能打开. 于是我在虚拟环境中使用了如下的命令</p>
-<p><code>sudo python3 manager.py runserver --host 0.0.0.0 -p 80</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo python3 manager.py runserver --host 0.0.0.0 -p 80</div></pre></td></tr></table></figure>
 <p>但是却报了如下的错误.</p>
 <p><img src="/peakhell-web/2017/06/19/一些常用的操作总结/models.jpg" alt="flask"></p>
 <p>flask包没有安装, 可是虚拟环境中已经安装了啊. 这时候要注意了, 你已经掉入了linux sudo中的一个小坑了. 先用下面的命令查看这条命令使用了哪个地方的python3</p>
 <p><img src="/peakhell-web/2017/06/19/一些常用的操作总结/envir.jpg" alt=""></p>
+<p>​可以看到, 当使用了sudo之后, 这时候的python是全局中的python, 而并不是虚拟环境中的python, 自然虚拟环境中的包就无法调用了.解决方法是将python换成虚拟环境中的python,可以这么写</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo venv/bin/python3 manager.py runserver --host 0.0.0.0 -p 80</div></pre></td></tr></table></figure>
+<p>​</p>
+<p>​</p>
 </li>
-</ol>
-<p>​    可以看到, 当使用了sudo之后, 这时候的python是全局中的python, 而并不是虚拟环境中的python, 自然虚拟环境中的包就无法调用了.解决方法是将python换成虚拟环境中的python,可以这么写</p>
-<p>​    <code>sudo venv/bin/python3 manager.py runserver --host 0.0.0.0 -p 80</code></p>
-<p>​    </p>
-<ol>
-<li>​</li>
 </ol>
 ]]></content>
     
@@ -178,7 +177,7 @@
     </summary>
     
     
-      <category term="python git" scheme="https://peakhell.github.io/peakhell-web/tags/python-git/"/>
+      <category term="python virtualenv" scheme="https://peakhell.github.io/peakhell-web/tags/python-virtualenv/"/>
     
   </entry>
   
@@ -187,7 +186,7 @@
     <link href="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-%E6%80%BB%E7%BB%93/"/>
     <id>https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/</id>
     <published>2017-06-09T04:01:11.000Z</published>
-    <updated>2017-06-15T08:24:12.313Z</updated>
+    <updated>2017-06-28T07:36:16.755Z</updated>
     
     <content type="html"><![CDATA[<p>​    最近使用flask做一个客户端的api接口, 学到了不少, 在这里总结用一下, 权当笔记.</p>
 <p>​    http 协议中共有8种请求方法, 常用的有6种,  如下图:</p>
@@ -212,42 +211,22 @@
 <li>flask中处理GET请求</li>
 </ol>
 <p>首先我们要知道, GET请求是明文请求, 它会把所有的参数都拼接在URL后面. 我们可以用先看个例子.</p>
-<p><code>$.ajax({</code></p>
-<p>​    <code>url: &quot;/sample/download_report&quot;,</code></p>
-<p>​    <code>type: &quot;GET&quot;,</code> </p>
-<p>​    <code>data: {&quot;sampleNumber&quot;:1},</code> </p>
-<p>​    <code>success: function (data) {</code>  </p>
-<p>​    <code>data.save()</code> </p>
-<p>​    <code>}</code>   </p>
-<p><code>})</code> </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">$.ajax(&#123;</div><div class="line"></div><div class="line">	<span class="attr">url</span>: <span class="string">"/sample/download_report"</span>,</div><div class="line"></div><div class="line">	<span class="attr">type</span>: <span class="string">"GET"</span>, </div><div class="line"></div><div class="line">	<span class="attr">data</span>: &#123;<span class="string">"sampleNumber"</span>:<span class="number">1</span>&#125;, </div><div class="line"></div><div class="line">	<span class="attr">success</span>: <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;  </div><div class="line"></div><div class="line">	data.save() </div><div class="line"></div><div class="line">	&#125;   </div><div class="line"></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <p>这是用jQuery写的使用GET请求方法向后端请求资源的方法. 可以看到我们构造了一个data, 并向url为”/sample/download_report”(相对地址)请求资源. 那么实际上上面的请求相当于</p>
 <p><code>/smaple/download_report?sampleNumber=1</code></p>
 <p>​    这一点要注意, 那么flask中怎么获取前端传来的请求数据呢.很简单, 以上面的代码为例, 我们要在flask中获取sampleNumber的话,只要</p>
-<p><code>from flask import request</code></p>
-<p><code>@api.route(&#39;/sample/download_report&#39;, methods=[&#39;GET&#39;])</code></p>
-<p><code>def sample_bind():</code></p>
-<p>​    <code>sampleNumber = request.args.get(&quot;sampleNumber&quot;)</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> request</div><div class="line"><span class="meta">@api.route('/sample/download_report', methods=['GET'])</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sample_bind</span><span class="params">()</span>:</span></div><div class="line">	sampleNumber = request.args.get(<span class="string">"sampleNumber"</span>)</div></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>关键的语句就是<code>request.args.get(&#39;sampleNumber&#39;)</code></p>
 <p>然后对输入的数据进行处理, 并返回就行了.</p>
-<pre><code>2.    flask中处理POST请求.
+<pre><code>2.    Flask中处理POST请求.
 </code></pre><p>处理POST请求稍微麻烦一点. 但falsk同样提供了方法供我们获取前端的数据.</p>
 <p>前端请求数据代码:</p>
-<p><code>var data = {    &quot;username&quot;: &quot;peakhell&quot;,</code> <code>&quot;sample_id&quot;: 1</code>  <code>};</code></p>
-<p><code>$.ajax({</code></p>
-<p>​    <code>url : &quot;/test&quot;,</code></p>
-<p>​    <code>type: &quot;POST&quot;,</code></p>
-<p>​    <code>headers: {</code></p>
-<p>​    <code>&#39;Content-Type&#39;:&#39;application/json&#39;    },</code>       </p>
-<p>​    <code>data: JSON.stringify(data),</code>    </p>
-<p>​    <code>success: function(data){        console.log(&quot;success&quot;)    }</code>    </p>
-<p><code>});</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> data = &#123;    <span class="string">"username"</span>: <span class="string">"peakhell"</span>, <span class="string">"sample_id"</span>: <span class="number">1</span>  &#125;;</div><div class="line">$.ajax(&#123;</div><div class="line">	<span class="attr">url</span> : <span class="string">"/test"</span>,</div><div class="line">	<span class="attr">type</span>: <span class="string">"POST"</span>,</div><div class="line">	<span class="attr">headers</span>: &#123;</div><div class="line">	<span class="string">'Content-Type'</span>:<span class="string">'application/json'</span>    &#125;,       </div><div class="line">	<span class="attr">data</span>: <span class="built_in">JSON</span>.stringify(data),    </div><div class="line">	<span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;        <span class="built_in">console</span>.log(<span class="string">"success"</span>)    &#125;    </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>首先声明请求方式为POST, 然后将字典数据json化.</p>
 <p>这个时候flask怎么获取POST的数据呢</p>
-<p><code>@api.route(&quot;/test&quot;, methods=[&#39;GET&#39;, &#39;POST&#39;])</code></p>
-<p><code>def test():</code></p>
-<p>​    <code>sample_id = request.json.get()&#39;sample_id&#39;)</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@api.route("/test", methods=['GET', 'POST'])</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></div><div class="line"></div><div class="line">	sample_id = request.json.get()<span class="string">'sample_id'</span>)</div></pre></td></tr></table></figure>
 ]]></content>
     
     <summary type="html">

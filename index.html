@@ -185,7 +185,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/" data-id="cj4gonl3v0005ftcmb3b3icyg" class="article-share-link">Partager</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/" data-id="cj4goxu290004xjcmoy022f13" class="article-share-link">Partager</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/#disqus_thread" class="article-comment-link">Commentaires</a>
       
@@ -213,7 +213,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/peakhell-web/2017/06/19/一些常用的操作总结/">一些常用的操作总结</a>
+      <a class="article-title" href="/peakhell-web/2017/06/19/一些常用的操作总结/">python3 虚拟环境常用操作</a>
     </h1>
   
 
@@ -228,39 +228,38 @@
 <li>创建python3的虚拟环境</li>
 </ul>
 <p>使用virtualenv默认创建的是linux下的默认Python版本, 也就是python2.7版本, 像我这种用python3的就不能直接用默认的命令,要加一个参数.</p>
-<p><code>virtualenv -p python3 venv</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">virtualenv -p python3 venv</div></pre></td></tr></table></figure>
 <p>当然, 每次都这么打肯定烦死, 一个一劳永逸的方法是把python3 当做默认的python版本, 这样就不用每次都打这么长了. 把python3当成默认的python版本主要有两种方法, 一种是别名, 一种是直接修改系统的设置. 这里只说第一种. </p>
 <p>编辑自己home目录下的.bashrc文件, 并在最后加上一句</p>
-<p><code>alias python=&#39;python3&#39;</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">alias python='python3'</div></pre></td></tr></table></figure>
+<p>​</p>
 <p><img src="/peakhell-web/2017/06/19/一些常用的操作总结/alias.jpg" alt="alias"></p>
 <p>顺便安利一下这个alias别名命令, 非常好用, 可以把常用的冗长的命令起个剪短的别名, 方便使用.</p>
 <ul>
 <li>使用sudo时虚拟环境中的包检测不到</li>
 </ul>
 <p>有一次我要在80端口启动flask程序, 前1024位都是系统服务端口, 必须启用管理员权限才能打开. 于是我在虚拟环境中使用了如下的命令</p>
-<p><code>sudo python3 manager.py runserver --host 0.0.0.0 -p 80</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo python3 manager.py runserver --host 0.0.0.0 -p 80</div></pre></td></tr></table></figure>
 <p>但是却报了如下的错误.</p>
 <p><img src="/peakhell-web/2017/06/19/一些常用的操作总结/models.jpg" alt="flask"></p>
 <p>flask包没有安装, 可是虚拟环境中已经安装了啊. 这时候要注意了, 你已经掉入了linux sudo中的一个小坑了. 先用下面的命令查看这条命令使用了哪个地方的python3</p>
 <p><img src="/peakhell-web/2017/06/19/一些常用的操作总结/envir.jpg" alt=""></p>
+<p>​可以看到, 当使用了sudo之后, 这时候的python是全局中的python, 而并不是虚拟环境中的python, 自然虚拟环境中的包就无法调用了.解决方法是将python换成虚拟环境中的python,可以这么写</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo venv/bin/python3 manager.py runserver --host 0.0.0.0 -p 80</div></pre></td></tr></table></figure>
+<p>​</p>
+<p>​</p>
 </li>
-</ol>
-<p>​    可以看到, 当使用了sudo之后, 这时候的python是全局中的python, 而并不是虚拟环境中的python, 自然虚拟环境中的包就无法调用了.解决方法是将python换成虚拟环境中的python,可以这么写</p>
-<p>​    <code>sudo venv/bin/python3 manager.py runserver --host 0.0.0.0 -p 80</code></p>
-<p>​    </p>
-<ol>
-<li>​</li>
 </ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/" data-id="cj4gonl3w0006ftcmo1xhoxp7" class="article-share-link">Partager</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/" data-id="cj4goxu2e0007xjcmgpkx2xy9" class="article-share-link">Partager</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/#disqus_thread" class="article-comment-link">Commentaires</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/python-git/">python git</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/python-virtualenv/">python virtualenv</a></li></ul>
 
     </footer>
   </div>
@@ -314,47 +313,27 @@
 <li>flask中处理GET请求</li>
 </ol>
 <p>首先我们要知道, GET请求是明文请求, 它会把所有的参数都拼接在URL后面. 我们可以用先看个例子.</p>
-<p><code>$.ajax({</code></p>
-<p>​    <code>url: &quot;/sample/download_report&quot;,</code></p>
-<p>​    <code>type: &quot;GET&quot;,</code> </p>
-<p>​    <code>data: {&quot;sampleNumber&quot;:1},</code> </p>
-<p>​    <code>success: function (data) {</code>  </p>
-<p>​    <code>data.save()</code> </p>
-<p>​    <code>}</code>   </p>
-<p><code>})</code> </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">$.ajax(&#123;</div><div class="line"></div><div class="line">	<span class="attr">url</span>: <span class="string">"/sample/download_report"</span>,</div><div class="line"></div><div class="line">	<span class="attr">type</span>: <span class="string">"GET"</span>, </div><div class="line"></div><div class="line">	<span class="attr">data</span>: &#123;<span class="string">"sampleNumber"</span>:<span class="number">1</span>&#125;, </div><div class="line"></div><div class="line">	<span class="attr">success</span>: <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;  </div><div class="line"></div><div class="line">	data.save() </div><div class="line"></div><div class="line">	&#125;   </div><div class="line"></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <p>这是用jQuery写的使用GET请求方法向后端请求资源的方法. 可以看到我们构造了一个data, 并向url为”/sample/download_report”(相对地址)请求资源. 那么实际上上面的请求相当于</p>
 <p><code>/smaple/download_report?sampleNumber=1</code></p>
 <p>​    这一点要注意, 那么flask中怎么获取前端传来的请求数据呢.很简单, 以上面的代码为例, 我们要在flask中获取sampleNumber的话,只要</p>
-<p><code>from flask import request</code></p>
-<p><code>@api.route(&#39;/sample/download_report&#39;, methods=[&#39;GET&#39;])</code></p>
-<p><code>def sample_bind():</code></p>
-<p>​    <code>sampleNumber = request.args.get(&quot;sampleNumber&quot;)</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> request</div><div class="line"><span class="meta">@api.route('/sample/download_report', methods=['GET'])</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sample_bind</span><span class="params">()</span>:</span></div><div class="line">	sampleNumber = request.args.get(<span class="string">"sampleNumber"</span>)</div></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>关键的语句就是<code>request.args.get(&#39;sampleNumber&#39;)</code></p>
 <p>然后对输入的数据进行处理, 并返回就行了.</p>
-<pre><code>2.    flask中处理POST请求.
+<pre><code>2.    Flask中处理POST请求.
 </code></pre><p>处理POST请求稍微麻烦一点. 但falsk同样提供了方法供我们获取前端的数据.</p>
 <p>前端请求数据代码:</p>
-<p><code>var data = {    &quot;username&quot;: &quot;peakhell&quot;,</code> <code>&quot;sample_id&quot;: 1</code>  <code>};</code></p>
-<p><code>$.ajax({</code></p>
-<p>​    <code>url : &quot;/test&quot;,</code></p>
-<p>​    <code>type: &quot;POST&quot;,</code></p>
-<p>​    <code>headers: {</code></p>
-<p>​    <code>&#39;Content-Type&#39;:&#39;application/json&#39;    },</code>       </p>
-<p>​    <code>data: JSON.stringify(data),</code>    </p>
-<p>​    <code>success: function(data){        console.log(&quot;success&quot;)    }</code>    </p>
-<p><code>});</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> data = &#123;    <span class="string">"username"</span>: <span class="string">"peakhell"</span>, <span class="string">"sample_id"</span>: <span class="number">1</span>  &#125;;</div><div class="line">$.ajax(&#123;</div><div class="line">	<span class="attr">url</span> : <span class="string">"/test"</span>,</div><div class="line">	<span class="attr">type</span>: <span class="string">"POST"</span>,</div><div class="line">	<span class="attr">headers</span>: &#123;</div><div class="line">	<span class="string">'Content-Type'</span>:<span class="string">'application/json'</span>    &#125;,       </div><div class="line">	<span class="attr">data</span>: <span class="built_in">JSON</span>.stringify(data),    </div><div class="line">	<span class="attr">success</span>: <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;        <span class="built_in">console</span>.log(<span class="string">"success"</span>)    &#125;    </div><div class="line">&#125;);</div></pre></td></tr></table></figure>
 <p>首先声明请求方式为POST, 然后将字典数据json化.</p>
 <p>这个时候flask怎么获取POST的数据呢</p>
-<p><code>@api.route(&quot;/test&quot;, methods=[&#39;GET&#39;, &#39;POST&#39;])</code></p>
-<p><code>def test():</code></p>
-<p>​    <code>sample_id = request.json.get()&#39;sample_id&#39;)</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@api.route("/test", methods=['GET', 'POST'])</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></div><div class="line"></div><div class="line">	sample_id = request.json.get()<span class="string">'sample_id'</span>)</div></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/" data-id="cj4gonl3h0000ftcmu0d2sql8" class="article-share-link">Partager</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/" data-id="cj4goxu240001xjcmds77jrpk" class="article-share-link">Partager</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/#disqus_thread" class="article-comment-link">Commentaires</a>
       
@@ -394,7 +373,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/" data-id="cj4gonl41000eftcmiwafajar" class="article-share-link">Partager</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/" data-id="cj4goxu2t000pxjcmilv3d0mq" class="article-share-link">Partager</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/#disqus_thread" class="article-comment-link">Commentaires</a>
       
@@ -440,7 +419,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/" data-id="cj4gonl3x0009ftcmpfs8ojsl" class="article-share-link">Partager</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/" data-id="cj4goxu2f000axjcm80bu4q9d" class="article-share-link">Partager</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/#disqus_thread" class="article-comment-link">Commentaires</a>
       
@@ -504,7 +483,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/" data-id="cj4gonl3p0003ftcmbs3nzsmx" class="article-share-link">Partager</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/" data-id="cj4goxu2d0006xjcmcdce4jp7" class="article-share-link">Partager</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/#disqus_thread" class="article-comment-link">Commentaires</a>
       
@@ -595,7 +574,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/" data-id="cj4gonl3l0001ftcm8kjjr1eo" class="article-share-link">Partager</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/" data-id="cj4goxu250002xjcmjqruln91" class="article-share-link">Partager</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/#disqus_thread" class="article-comment-link">Commentaires</a>
       
@@ -628,7 +607,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Mot-clés</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/flask/">flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/jQuery-前端/">jQuery 前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/python-git/">python git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/flask/">flask</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/jQuery-前端/">jQuery 前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/python-virtualenv/">python virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
     </div>
   </div>
 
@@ -638,7 +617,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Nuage de mot-clés</h3>
     <div class="widget tagcloud">
-      <a href="/peakhell-web/tags/flask/" style="font-size: 10px;">flask</a> <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/jQuery-前端/" style="font-size: 10px;">jQuery 前端</a> <a href="/peakhell-web/tags/python-git/" style="font-size: 10px;">python git</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a>
+      <a href="/peakhell-web/tags/flask/" style="font-size: 10px;">flask</a> <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/jQuery-前端/" style="font-size: 10px;">jQuery 前端</a> <a href="/peakhell-web/tags/python-virtualenv/" style="font-size: 10px;">python virtualenv</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a>
     </div>
   </div>
 
@@ -664,7 +643,7 @@
           </li>
         
           <li>
-            <a href="/peakhell-web/2017/06/19/一些常用的操作总结/">一些常用的操作总结</a>
+            <a href="/peakhell-web/2017/06/19/一些常用的操作总结/">python3 虚拟环境常用操作</a>
           </li>
         
           <li>
