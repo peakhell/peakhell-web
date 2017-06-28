@@ -5,7 +5,7 @@
   <link href="/peakhell-web/atom.xml" rel="self"/>
   
   <link href="https://peakhell.github.io/peakhell-web/"/>
-  <updated>2017-06-28T07:31:36.565Z</updated>
+  <updated>2017-06-28T08:34:02.751Z</updated>
   <id>https://peakhell.github.io/peakhell-web/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>jQuery笔记</title>
+    <title>jQuery笔记(1)- 常见的DOM操作</title>
     <link href="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery%E7%AC%94%E8%AE%B0/"/>
     <id>https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/</id>
     <published>2017-06-27T07:27:35.000Z</published>
-    <updated>2017-06-28T07:31:36.565Z</updated>
+    <updated>2017-06-28T08:34:02.751Z</updated>
     
     <content type="html"><![CDATA[<p>​    jQuery非常好用, 但是也有一些地方要多加留意, 这里总结一下我犯过错误, 权当前车之鉴, 希望各位不要犯和我一样的错.</p>
 <ol>
@@ -42,7 +42,7 @@
 <p><code>$(html)</code></p>
 <p>例如在创建两个li标签, 可以这么写</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> $li1 = $(<span class="string">"&lt;li&gt;时越&lt;/li&gt;"</span>)</div><div class="line"><span class="keyword">var</span> $li2 = $(<span class="string">"&lt;li&gt;姜东润&lt;/li&gt;"</span>)</div></pre></td></tr></table></figure>
-<p>注意这里的变量命, 前面有个$, 这是为了区分jQuery对象与Dom对象. 上面的代码创建了两个包含文本的li标签,  我们还可以直接创建带有属性值的标签.</p>
+<p>注意这里的变量命名, 前面有个$, 这是为了区分jQuery对象与Dom对象. 上面的代码创建了两个包含文本的li标签,  我们还可以直接创建带有属性值的标签.</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> $li3 = $(<span class="string">"&lt;li class='china' title='胡跃峰'&gt;胡跃峰&lt;/li&gt;"</span>)</div></pre></td></tr></table></figure>
 <ul>
 <li><p>插入元素节点</p>
@@ -112,6 +112,30 @@
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"ul li:eq(1)"</span>).clone().appendTo(<span class="string">"ul"</span>)</div></pre></td></tr></table></figure>
 <p>上面的代码会复制第二个li标签并添加到ul内部. 需要注意的是这样写复制的节点不具有任何行为和附加数据, 若要继承原始节点所拥有的事件行为或附加数据, 应在clone方法中添加参数true</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(&quot;ul li:eq(1)&quot;).clone(true).appendTo(&quot;ul&quot;)</div></pre></td></tr></table></figure>
+<ul>
+<li>替换元素节点</li>
+</ul>
+<p>jQuery提供了两种方法用以替换某个元素节点, 即replaceWith 和 replaceAll. replaceWith会把所有匹配的元素都替换成指定的HTML或者DOM元素.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> $li1 = $(<span class="string">"&lt;li&gt;时越&lt;/li&gt;"</span>)</div><div class="line">$(<span class="string">"ul li[title=柯洁]"</span>).replaceWith($li1)</div></pre></td></tr></table></figure>
+<p>上面的代码会把li标签为柯洁那一行替换成指定的html.</p>
+<p>也可以用replaceAll来完成, 两者的功能完全一致, 只是replaceAll颠倒了操作的顺序.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$li1.replaceAll(<span class="string">"ul li[title=柯洁]"</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li>包裹元素节点</li>
+</ul>
+<p>如果要把某个节点用其他标签包裹起来, jQuery也提供了相对应的方法, 这是非常有用的.主要有三种wrap, wrapAll和wrapInner</p>
+<p>例如我们要把li标签中的某些个表示强调, 可以用strong标签将其包裹起来. 使用jQuery可以这么写:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"ul li"</span>).wrap(<span class="string">"&lt;strong&gt;&lt;/strong&gt;"</span>)</div></pre></td></tr></table></figure>
+<p>查看源码, 会发现所有的li 标签都被strong标签包裹. 如下所示:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"go"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">h2</span>&gt;</span>围棋国手<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">strong</span>&gt;</span><span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"柯洁"</span>&gt;</span>柯洁<span class="tag">&lt;/<span class="name">li</span>&gt;</span><span class="tag">&lt;/<span class="name">strong</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">strong</span>&gt;</span><span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"唐韦星"</span>&gt;</span>唐韦星<span class="tag">&lt;/<span class="name">li</span>&gt;</span><span class="tag">&lt;/<span class="name">strong</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">strong</span>&gt;</span><span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"李世石"</span>&gt;</span>李世石<span class="tag">&lt;/<span class="name">li</span>&gt;</span><span class="tag">&lt;/<span class="name">strong</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"test"</span>&gt;</span>test<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>与wrap不同, wrapAll方法会对选中的元素整体进行包裹. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"ul li"</span>).wrapAll(<span class="string">"&lt;strong&gt;&lt;/strong&gt;"</span>)</div></pre></td></tr></table></figure>
+<p>注意看源码, 会发现所有的li标签都被包裹在一个strong标签中</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"go"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">h2</span>&gt;</span>围棋国手<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">strong</span>&gt;</span><span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"柯洁"</span>&gt;</span>柯洁<span class="tag">&lt;/<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"唐韦星"</span>&gt;</span>唐韦星<span class="tag">&lt;/<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"李世石"</span>&gt;</span>李世石<span class="tag">&lt;/<span class="name">li</span>&gt;</span><span class="tag">&lt;/<span class="name">strong</span>&gt;</span>     </div><div class="line">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"test"</span>&gt;</span>test<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>还有一个包裹的方法是wrapInner,  该方法将每一个匹配的元素的子内容(包括文本节点)用其他结构化的标记包裹起来</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"ul li"</span>).wrapInner(<span class="string">"&lt;strong&gt;&lt;/strong&gt;"</span>)</div></pre></td></tr></table></figure>
+<p>观察源码,会发现strong会被添加到li标签的内部, 并对其中的文本进行包裹.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"go"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">h2</span>&gt;</span>围棋国手<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"柯洁"</span>&gt;</span><span class="tag">&lt;<span class="name">strong</span>&gt;</span>柯洁<span class="tag">&lt;/<span class="name">strong</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"唐韦星"</span>&gt;</span><span class="tag">&lt;<span class="name">strong</span>&gt;</span>唐韦星<span class="tag">&lt;/<span class="name">strong</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"李世石"</span>&gt;</span><span class="tag">&lt;<span class="name">strong</span>&gt;</span>李世石<span class="tag">&lt;/<span class="name">strong</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"test"</span>&gt;</span>test<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>​    </p>
 ]]></content>
     
