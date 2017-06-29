@@ -68,6 +68,105 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-jQuery笔记2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/peakhell-web/2017/06/29/jQuery笔记2/" class="article-date">
+  <time datetime="2017-06-29T01:47:08.000Z" itemprop="datePublished">2017-06-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/peakhell-web/2017/06/29/jQuery笔记2/">jQuery笔记2</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ol>
+<li><p>DOM操作之 属性与样式</p>
+<p>​    在上一篇jQuery笔记1中把DOM元素节点的常用操作都介绍了一遍, 这一篇笔记仍是有关jQuery DOM的操作, 主要是DOM节点中属性与样式的添加, 更改删除等操作</p>
+<h4 id="属性操作"><a href="#属性操作" class="headerlink" title="属性操作"></a>属性操作</h4><p>jQuery 使用attr和removeAttr这两个方法来对节点的属性进行操作, 其中attr方法可以用来获取和设置属性, removeAttr可以用来删除节点的属性.为方便说明,下面所有的例子都基于以下的html代码:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"go"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>围棋国手<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"柯洁"</span>&gt;</span>柯洁<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"唐韦星"</span>&gt;</span>唐韦星<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"李世石"</span>&gt;</span>李世石<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://github.com"</span> <span class="attr">title</span>=<span class="string">"默认提示"</span>&gt;</span>同性交友<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"test"</span>&gt;</span>test<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p><strong>属性的获取与设置</strong></p>
+<p>jQuery中节点属性的获取与设置可以通过同一个方法来实现, 当传入的参数为一个时, attr方法可以获取节点的属性, 当传入的参数为两个时, attr方法可以设置节点的属性.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> title = $(<span class="string">"ul li"</span>).attr(<span class="string">"title"</span>)</div><div class="line"><span class="built_in">console</span>.log(title)</div></pre></td></tr></table></figure>
+<p>打开控制台, 你可以看到输出了 <code>柯洁</code> , 从这里可以看出attr方法一个重要的特性,  <strong>如果有多个匹配的元素, 那么只会获取第一个元素的属性</strong>, 这点要牢记.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"li"</span>).attr(<span class="string">"class"</span>, <span class="string">"player"</span>)</div></pre></td></tr></table></figure>
+<p>上面的代码给li 标签添加class属性, 打开浏览器查看源码, 可以看到源码变成了这样子:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"go"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">h2</span> <span class="attr">style</span>=<span class="string">"font-size: 30px"</span>&gt;</span>围棋国手<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"柯洁"</span> <span class="attr">class</span>=<span class="string">"player"</span>&gt;</span>柯洁<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"唐韦星"</span> <span class="attr">class</span>=<span class="string">"player"</span>&gt;</span>唐韦星<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">li</span> <span class="attr">title</span>=<span class="string">"李世石"</span> <span class="attr">class</span>=<span class="string">"player"</span>&gt;</span>李世石<span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"http://github.com"</span> <span class="attr">title</span>=<span class="string">"默认提示"</span>&gt;</span>同性交友<span class="tag">&lt;/<span class="name">a</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"test"</span>&gt;</span>test<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>也就是说, 每一个li标签都添加了class为player的属性, 这与获取的时候不太一样, 大家千万牢记在心. </p>
+<p>如果要一次性给元素加点添加多个属性, jQuery还提供了一种便利的写法:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"ul li"</span>).attr(&#123;<span class="string">"class"</span>: <span class="string">"player"</span>, <span class="string">"name"</span>: <span class="string">"go"</span>&#125;)</div></pre></td></tr></table></figure>
+<p>​</p>
+<p><strong>属性的删除</strong></p>
+<p>节点属性的删除可以使用removeAttr方法来实现, 例如要删除li标签中的title属性, 可以这么写</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"li"</span>).removeAttr(<span class="string">"title"</span>)</div></pre></td></tr></table></figure>
+<p>这样就可以把所有匹配的元素节点中的title属性删除了. </p>
+<p>​</p>
+<h4 id="样式操作"><a href="#样式操作" class="headerlink" title="样式操作"></a>样式操作</h4><p>​    在前端开发中,我们通常会把样式写在class中, 然后在节点中引入. 因此对样式的操作大致可以分为两类, 一种是对class的操作, 另一种是直接对css进行处理, 下面将详细讲述jQuery的样式操作.</p>
+<p><strong>样式的获取与设置</strong></p>
+<p>样式的获取和设置可以使用css方法. 例如我们要获取h2标签的样式</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"h2"</span>).css(<span class="string">"font-size"</span>)</div></pre></td></tr></table></figure>
+<p>与attr方法一样,css方法带一个参数时是获取css样式, 带两个参数是设置节点属性的样式.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"h2"</span>).css(<span class="string">"color"</span>,<span class="string">"#444"</span>)</div></pre></td></tr></table></figure>
+<p>上面的代码会给h2标签添加颜色为#444的样式.同样的, 我们还可以同时设置多个属性, 用法也是和attr方法相同.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"h2"</span>).css(&#123;</div><div class="line">	<span class="string">"color"</span>: <span class="string">"#333"</span>,</div><div class="line">  	<span class="string">"font-size"</span>: <span class="string">"40px"</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p><strong>使用class进行样式的处理</strong></p>
+<p>上面的方法是直接使用css方法对节点进行样式的获取与设置, 但在实际的前端开发中, 绝大多数的样式属性是卸载class中, 因此,jQuery也提供了一系列的方法供我们对class进行操作, 包括添加class的方法addClass, 删除class的方法removeClass, 切换class的方法toggleClass等等, 下面详细介绍这些方法进行样式的处理.</p>
+<p><strong>追加样式</strong></p>
+<p>为方便理解, 我们先写两个样式文件</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.highlight</span>&#123;</div><div class="line">  <span class="attribute">color</span>: <span class="number">#ff0000</span>;</div><div class="line">&#125;</div><div class="line"><span class="selector-class">.blue</span>&#123;</div><div class="line">  <span class="attribute">color</span>: <span class="number">#6FBFD7</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>给h2标签添加类名可以这么写</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"h2"</span>).addClass(<span class="string">"highlight"</span>)</div></pre></td></tr></table></figure>
+<p>这样代码会给h2标签追加一个highlight的类名.如果要同时追加多个类名的话也是可以的, 只要用空格空开就行了.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"h2"</span>).addClass(<span class="string">"highlight blue"</span>)</div></pre></td></tr></table></figure>
+<p>​</p>
+<p><strong>移除样式</strong></p>
+<p>用法和addClass一样, 只是作用是把类名从标签中移出去.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"h2"</span>).removeClass(<span class="string">"highlight"</span>)</div></pre></td></tr></table></figure>
+<p>同样的,我们也可以同事移除多个类名.</p>
+<p><strong>切换样式</strong></p>
+<p>当前端开发中有时候我们会遇到这样一种情况, 那就是样式会反复切换, 取个简单的例子就是, 一个标题栏点击之后高亮, 再次点击又变回原样, 我们可以用addClass和removeClass来实现.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"h2"</span>).click(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span> ($(<span class="keyword">this</span>).hasClass(<span class="string">"highlight"</span>))&#123;</div><div class="line">    $(<span class="keyword">this</span>).removeClass(<span class="string">"highlight"</span>)</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">else</span>&#123;</div><div class="line">    $(<span class="keyword">this</span>).addClass(<span class="string">"highlight"</span>)</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>但对于一个常用的功能, 这种实现显然还是比较繁琐, 因此,jQuery提供了一种非常简洁的方法来实现这一功能, 那就是toggleClass, 上面的代码可以用下面这一行代码来代替:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"h2"</span>).click(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  $(<span class="string">"h2"</span>).toggleClass(<span class="string">"highlight"</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p><strong>判断样式是否存在</strong></p>
+<p>hasClass方法可以用来判断元素中是否包含某个class.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">"h2"</span>).hasClass(<span class="string">"highlight"</span>)</div></pre></td></tr></table></figure>
+<p>用法非常简单. </p>
+<p>关于jQuery 对样式的操作大致就这么多了, 下一篇我会介绍jQuery中Dom操作中的其他内容.</p>
+<p>​</p>
+<p>​</p>
+<p>​</p>
+<p>​</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/29/jQuery笔记2/" data-id="cj4i7isw30007mccm38bgpqdy" class="article-share-link">Share</a>
+      
+        <a href="https://peakhell.github.io/peakhell-web/2017/06/29/jQuery笔记2/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/jQuery/">jQuery</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-jQuery笔记" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/peakhell-web/2017/06/27/jQuery笔记/" class="article-date">
@@ -209,7 +308,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/" data-id="cj4gqw1dt0005zncmyc2u1d36" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/" data-id="cj4i7isw20006mccmgcvtpfg2" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -278,7 +377,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/" data-id="cj4gqw1du0006zncm0ojlqlbx" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/" data-id="cj4i7isw4000amccmnmudvzld" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -360,7 +459,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/" data-id="cj4gqw1df0000zncm2wy596hr" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/" data-id="cj4i7isvr0001mccmcdu8v265" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -400,7 +499,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/" data-id="cj4gqw1dv0009zncmv65cwjf9" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/" data-id="cj4i7isw7000fmccm3ok4bvv2" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -446,7 +545,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/" data-id="cj4gqw1dy000ezncmj9gj149r" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/" data-id="cj4i7isw6000cmccmfl7b76xz" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -510,7 +609,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/" data-id="cj4gqw1do0003zncm2j53xzib" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/" data-id="cj4i7isw00004mccmn390sm9l" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -601,7 +700,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/" data-id="cj4gqw1dj0001zncm7bjrvfr5" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/" data-id="cj4i7isvu0002mccmjapgu8gu" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -634,7 +733,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/flask-python/">flask python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/jQuery-前端/">jQuery 前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/python-virtualenv/">python virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/flask-python/">flask python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/jQuery-前端/">jQuery 前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/python-virtualenv/">python virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
     </div>
   </div>
 
@@ -644,7 +743,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/peakhell-web/tags/flask-python/" style="font-size: 10px;">flask python</a> <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/jQuery-前端/" style="font-size: 10px;">jQuery 前端</a> <a href="/peakhell-web/tags/python-virtualenv/" style="font-size: 10px;">python virtualenv</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a>
+      <a href="/peakhell-web/tags/flask-python/" style="font-size: 10px;">flask python</a> <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/peakhell-web/tags/jQuery-前端/" style="font-size: 10px;">jQuery 前端</a> <a href="/peakhell-web/tags/python-virtualenv/" style="font-size: 10px;">python virtualenv</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a>
     </div>
   </div>
 
@@ -666,6 +765,10 @@
       <ul>
         
           <li>
+            <a href="/peakhell-web/2017/06/29/jQuery笔记2/">jQuery笔记2</a>
+          </li>
+        
+          <li>
             <a href="/peakhell-web/2017/06/27/jQuery笔记/">jQuery笔记(1)- 常见的DOM操作</a>
           </li>
         
@@ -679,10 +782,6 @@
         
           <li>
             <a href="/peakhell-web/2017/05/31/让D3绘制的力导向图发光/">让D3绘制的力导向图发光</a>
-          </li>
-        
-          <li>
-            <a href="/peakhell-web/2017/05/18/写给快要毕业的自己/">写给快要毕业的自己</a>
           </li>
         
       </ul>
