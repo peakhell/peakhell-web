@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>jQuery笔记2 | Peakhell的个人网站</title>
+  <title>jQuery笔记(2) - 常见的DOM操作 | Peakhell的个人网站</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="DOM操作之 属性与样式 ​    在上一篇jQuery笔记1中把DOM元素节点的常用操作都介绍了一遍, 这一篇笔记仍是有关jQuery DOM的操作, 主要是DOM节点中属性与样式的添加, 更改删除等操作 属性操作jQuery 使用attr和removeAttr这两个方法来对节点的属性进行操作, 其中attr方法可以用来获取和设置属性, removeAttr可以用来删除节点的属性.为方便说明,">
 <meta name="keywords" content="jQuery">
 <meta property="og:type" content="article">
-<meta property="og:title" content="jQuery笔记2">
+<meta property="og:title" content="jQuery笔记(2) - 常见的DOM操作">
 <meta property="og:url" content="https://peakhell.github.io/peakhell-web/2017/06/29/jQuery笔记2/index.html">
 <meta property="og:site_name" content="Peakhell的个人网站">
 <meta property="og:description" content="DOM操作之 属性与样式 ​    在上一篇jQuery笔记1中把DOM元素节点的常用操作都介绍了一遍, 这一篇笔记仍是有关jQuery DOM的操作, 主要是DOM节点中属性与样式的添加, 更改删除等操作 属性操作jQuery 使用attr和removeAttr这两个方法来对节点的属性进行操作, 其中attr方法可以用来获取和设置属性, removeAttr可以用来删除节点的属性.为方便说明,">
-<meta property="og:updated_time" content="2017-06-29T09:07:37.884Z">
+<meta property="og:updated_time" content="2017-07-03T03:17:58.556Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jQuery笔记2">
+<meta name="twitter:title" content="jQuery笔记(2) - 常见的DOM操作">
 <meta name="twitter:description" content="DOM操作之 属性与样式 ​    在上一篇jQuery笔记1中把DOM元素节点的常用操作都介绍了一遍, 这一篇笔记仍是有关jQuery DOM的操作, 主要是DOM节点中属性与样式的添加, 更改删除等操作 属性操作jQuery 使用attr和removeAttr这两个方法来对节点的属性进行操作, 其中attr方法可以用来获取和设置属性, removeAttr可以用来删除节点的属性.为方便说明,">
   
     <link rel="alternate" href="/atom.xml" title="Peakhell的个人网站" type="application/atom+xml">
@@ -57,9 +57,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://peakhell.github.io/peakhell-web"></form>
@@ -82,7 +82,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      jQuery笔记2
+      jQuery笔记(2) - 常见的DOM操作
     </h1>
   
 
@@ -153,9 +153,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/29/jQuery笔记2/" data-id="cj4i7isw30007mccm38bgpqdy" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/29/jQuery笔记2/" data-id="cj4nksr5r0007fzcmtb9xwwy7" class="article-share-link">Partager</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/06/29/jQuery笔记2/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/06/29/jQuery笔记2/#disqus_thread" class="article-comment-link">Commentaires</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/jQuery/">jQuery</a></li></ul>
@@ -168,8 +168,8 @@
   
   
     <a href="/peakhell-web/2017/06/27/jQuery笔记/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">jQuery笔记(1)- 常见的DOM操作</div>
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">jQuery笔记(1) - 常见的DOM操作</div>
     </a>
   
 </nav>
@@ -189,7 +189,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
+    <h3 class="widget-title">Catégories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/peakhell-web/categories/杂想/">杂想</a></li><li class="category-list-item"><a class="category-list-link" href="/peakhell-web/categories/编程/">编程</a></li></ul>
     </div>
@@ -199,9 +199,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
+    <h3 class="widget-title">Mot-clés</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/flask-python/">flask python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/jQuery-前端/">jQuery 前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/python-virtualenv/">python virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/flask-python/">flask python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/python-virtualenv/">python virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
     </div>
   </div>
 
@@ -209,9 +209,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">Nuage de mot-clés</h3>
     <div class="widget tagcloud">
-      <a href="/peakhell-web/tags/flask-python/" style="font-size: 10px;">flask python</a> <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/peakhell-web/tags/jQuery-前端/" style="font-size: 10px;">jQuery 前端</a> <a href="/peakhell-web/tags/python-virtualenv/" style="font-size: 10px;">python virtualenv</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a>
+      <a href="/peakhell-web/tags/flask-python/" style="font-size: 10px;">flask python</a> <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/jQuery/" style="font-size: 20px;">jQuery</a> <a href="/peakhell-web/tags/python-virtualenv/" style="font-size: 10px;">python virtualenv</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a>
     </div>
   </div>
 
@@ -228,16 +228,16 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         
           <li>
-            <a href="/peakhell-web/2017/06/29/jQuery笔记2/">jQuery笔记2</a>
+            <a href="/peakhell-web/2017/06/29/jQuery笔记2/">jQuery笔记(2) - 常见的DOM操作</a>
           </li>
         
           <li>
-            <a href="/peakhell-web/2017/06/27/jQuery笔记/">jQuery笔记(1)- 常见的DOM操作</a>
+            <a href="/peakhell-web/2017/06/27/jQuery笔记/">jQuery笔记(1) - 常见的DOM操作</a>
           </li>
         
           <li>

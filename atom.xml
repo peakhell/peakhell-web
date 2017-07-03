@@ -5,7 +5,7 @@
   <link href="/peakhell-web/atom.xml" rel="self"/>
   
   <link href="https://peakhell.github.io/peakhell-web/"/>
-  <updated>2017-06-29T09:07:37.884Z</updated>
+  <updated>2017-07-03T03:17:58.556Z</updated>
   <id>https://peakhell.github.io/peakhell-web/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>jQuery笔记2</title>
+    <title>jQuery笔记(2) - 常见的DOM操作</title>
     <link href="https://peakhell.github.io/peakhell-web/2017/06/29/jQuery%E7%AC%94%E8%AE%B02/"/>
     <id>https://peakhell.github.io/peakhell-web/2017/06/29/jQuery笔记2/</id>
     <published>2017-06-29T01:47:08.000Z</published>
-    <updated>2017-06-29T09:07:37.884Z</updated>
+    <updated>2017-07-03T03:17:58.556Z</updated>
     
     <content type="html"><![CDATA[<ol>
 <li><p>DOM操作之 属性与样式</p>
@@ -98,11 +98,11 @@
   </entry>
   
   <entry>
-    <title>jQuery笔记(1)- 常见的DOM操作</title>
+    <title>jQuery笔记(1) - 常见的DOM操作</title>
     <link href="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery%E7%AC%94%E8%AE%B0/"/>
     <id>https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/</id>
     <published>2017-06-27T07:27:35.000Z</published>
-    <updated>2017-06-28T08:34:02.751Z</updated>
+    <updated>2017-07-03T03:18:04.184Z</updated>
     
     <content type="html"><![CDATA[<p>​    jQuery非常好用, 但是也有一些地方要多加留意, 这里总结一下我犯过错误, 权当前车之鉴, 希望各位不要犯和我一样的错.</p>
 <ol>
@@ -232,7 +232,7 @@
     </summary>
     
     
-      <category term="jQuery 前端" scheme="https://peakhell.github.io/peakhell-web/tags/jQuery-%E5%89%8D%E7%AB%AF/"/>
+      <category term="jQuery" scheme="https://peakhell.github.io/peakhell-web/tags/jQuery/"/>
     
   </entry>
   
