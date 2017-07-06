@@ -55,9 +55,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://peakhell.github.io/peakhell-web"></form>
@@ -67,6 +67,88 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-MySQL用户管理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/peakhell-web/2017/07/05/MySQL用户管理/" class="article-date">
+  <time datetime="2017-07-05T09:26:52.000Z" itemprop="datePublished">2017-07-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/peakhell-web/2017/07/05/MySQL用户管理/">MySQL用户管理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    今天写了个爬虫, 想要使用MySQL数据库存储抓取的信息, 尴尬的发现自己忘记了密码, 嘛.谷歌一下总是会发现解决方法的, 但按照几个博客的方法看下来, 却意外的都出现了问题, 于是去MySQL官网看了看, 原来是由于MySQL的版本升级(现在是5.7.18版本), 有一些功能和字段已经有所改变, 这才导致那些博客的解决方法出现问题. 这里做个常用操作的总结, 权当笔记.当然, 只针对linux操作系统.</p>
+<pre><code>1.  登录
+</code></pre><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -u username -p</div></pre></td></tr></table></figure>
+<p>登录是最简单的操作了, 上面的命令会让你输入用户的密码, 正确即可进入mysql了.</p>
+<ol>
+<li>创建新用户</li>
+</ol>
+<p>只有具有管理员身份的用户才能创建新用户, 最常见的就是root用户, 先使用root用户登录mysql:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -u root -p</div></pre></td></tr></table></figure>
+<p>然后选择mysql数据库, mysql 是一个自带的特殊数据库, 用来管理用户 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">use mysql;</div></pre></td></tr></table></figure>
+<p>创建新用户, 其中username是你要创建的用户名, password是你的密码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">create user &apos;username&apos;@&apos;localhost&apos; identified by &apos;password&apos;</div></pre></td></tr></table></figure>
+<p>让操作生效</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">flush privileges;</div></pre></td></tr></table></figure>
+<p>然后就可以使用新用户登录了.</p>
+<ol>
+<li>查询用户</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">use mysql;</div><div class="line">select user,host from mysql.user</div><div class="line">flush privileges;</div></pre></td></tr></table></figure>
+<p>这条命令会列出所有的用户名机其主机位置, 你会发现有两个特殊的用户名mysql.sys 和 debian-sys-maint, 这两个用户是系统自带的, 当我们忘记root密码时, 可以通过这两个账户登上去修改root密码</p>
+<p><img src="/peakhell-web/2017/07/05/MySQL用户管理/search.png" alt="search user"></p>
+<ol>
+<li>删除用户</li>
+</ol>
+<p>通过查询我们可以知道有哪些用户, 如果要删除某个用户的话, 可以用这个命令, 其中username是你要删除的用户.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">use mysql;</div><div class="line">delete from mysql.user where (user,host) in (select &apos;username&apos;,&apos;localhost&apos;);</div><div class="line">flush privileges;</div></pre></td></tr></table></figure>
+<ol>
+<li>修改密码</li>
+</ol>
+<p>有时候可能需要修改用户的密码, 可以用下面的命令,其中newpassword是你要设置的新密码, user是用户名, 特别要注意的是, 如果mysql的版本是5.5之前的, 则要把authentication 字段改成password.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">use mysql;</div><div class="line">update mysql.user set authentication_string=password(’newpassword’) where User=’user’;</div><div class="line">flush privileges;</div></pre></td></tr></table></figure>
+<ol>
+<li>忘记管理员密码</li>
+</ol>
+<p>到了重点了, 网上有很多关于找回root密码的方法, 但其实有一个很简单的方法可以找回来, 还记得我在上面讲的特殊用户mysql.sys 和 debian-sys-maint吗, 我们可以利用这个特殊的用户来修改mysql root用户的密码.linux 有个特殊的文件保存了debian-sys-maint这个用户密码的配置文件, 如果你拥有管理员权限就可以打开这个文件, 登录这个账号, 然后修改root用户的密码.具体的操作如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/mysql/debian.cnf</div></pre></td></tr></table></figure>
+<p>如果没有问题的话, 你会看到类似下面的文件.</p>
+<p><img src="/peakhell-web/2017/07/05/MySQL用户管理/sys.png" alt="search user"></p>
+<p>注意看遮住的那一栏, 那就是debian-sys-maint这个用户的密码, 接下来我们使用这个账号登录,密码就是上面遮住的那一栏</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -u debian-sys-maint -p</div></pre></td></tr></table></figure>
+<p>然后再使用上面所说的修改密码的方法修改root的密码即可.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/" data-id="cj4se16so0000z7cman2pvknu" class="article-share-link">Share</a>
+      
+        <a href="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/MySQL/">MySQL</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-jQuery笔记2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -153,9 +235,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/29/jQuery笔记2/" data-id="cj4nksr5r0007fzcmtb9xwwy7" class="article-share-link">Partager</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/29/jQuery笔记2/" data-id="cj4se16t4000az7cm51gx88dl" class="article-share-link">Share</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/06/29/jQuery笔记2/#disqus_thread" class="article-comment-link">Commentaires</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/06/29/jQuery笔记2/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/jQuery/">jQuery</a></li></ul>
@@ -308,9 +390,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/" data-id="cj4nksr5q0006fzcmgjcnqspf" class="article-share-link">Partager</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/" data-id="cj4se16t30009z7cmrdjrw9ha" class="article-share-link">Share</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/#disqus_thread" class="article-comment-link">Commentaires</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/jQuery/">jQuery</a></li></ul>
@@ -377,9 +459,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/" data-id="cj4nksr5s000afzcmqi0xqkk0" class="article-share-link">Partager</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/" data-id="cj4se16t5000cz7cm44qeynfg" class="article-share-link">Share</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/#disqus_thread" class="article-comment-link">Commentaires</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/python-virtualenv/">python virtualenv</a></li></ul>
@@ -459,9 +541,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/" data-id="cj4nksr5g0001fzcm0xy3bdi3" class="article-share-link">Partager</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/" data-id="cj4se16sw0003z7cmqpia1mfa" class="article-share-link">Share</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/#disqus_thread" class="article-comment-link">Commentaires</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/flask-python/">flask python</a></li></ul>
@@ -499,9 +581,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/" data-id="cj4nksr5v000ffzcm5w0saocz" class="article-share-link">Partager</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/" data-id="cj4se16t9000iz7cmx41h3srq" class="article-share-link">Share</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/#disqus_thread" class="article-comment-link">Commentaires</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/#disqus_thread" class="article-comment-link">Comments</a>
       
       
     </footer>
@@ -545,9 +627,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/" data-id="cj4nksr5u000cfzcm9jorn1jv" class="article-share-link">Partager</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/" data-id="cj4se16t8000fz7cmvlei0kbt" class="article-share-link">Share</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/#disqus_thread" class="article-comment-link">Commentaires</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
@@ -609,9 +691,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/" data-id="cj4nksr5o0004fzcmtcwduuuc" class="article-share-link">Partager</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/" data-id="cj4se16sz0005z7cmduylmia8" class="article-share-link">Share</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/#disqus_thread" class="article-comment-link">Commentaires</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/git/">git</a></li></ul>
@@ -700,9 +782,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/" data-id="cj4nksr5i0002fzcm0i0hid8z" class="article-share-link">Partager</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/" data-id="cj4se16sy0004z7cmff9vtvd5" class="article-share-link">Share</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/#disqus_thread" class="article-comment-link">Commentaires</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/#disqus_thread" class="article-comment-link">Comments</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/git/">git</a></li></ul>
@@ -721,7 +803,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Catégories</h3>
+    <h3 class="widget-title">Categories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/peakhell-web/categories/杂想/">杂想</a></li><li class="category-list-item"><a class="category-list-link" href="/peakhell-web/categories/编程/">编程</a></li></ul>
     </div>
@@ -731,9 +813,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Mot-clés</h3>
+    <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/flask-python/">flask python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/python-virtualenv/">python virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/flask-python/">flask python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/python-virtualenv/">python virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
     </div>
   </div>
 
@@ -741,9 +823,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/peakhell-web/tags/flask-python/" style="font-size: 10px;">flask python</a> <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/jQuery/" style="font-size: 20px;">jQuery</a> <a href="/peakhell-web/tags/python-virtualenv/" style="font-size: 10px;">python virtualenv</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a>
+      <a href="/peakhell-web/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/peakhell-web/tags/flask-python/" style="font-size: 10px;">flask python</a> <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/jQuery/" style="font-size: 20px;">jQuery</a> <a href="/peakhell-web/tags/python-virtualenv/" style="font-size: 10px;">python virtualenv</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a>
     </div>
   </div>
 
@@ -752,7 +834,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/05/">May 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/05/">May 2017</a></li></ul>
     </div>
   </div>
 
@@ -760,9 +842,13 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/peakhell-web/2017/07/05/MySQL用户管理/">MySQL用户管理</a>
+          </li>
         
           <li>
             <a href="/peakhell-web/2017/06/29/jQuery笔记2/">jQuery笔记(2) - 常见的DOM操作</a>
@@ -778,10 +864,6 @@
         
           <li>
             <a href="/peakhell-web/2017/06/09/Flask-Api-总结/">Flask Api 总结</a>
-          </li>
-        
-          <li>
-            <a href="/peakhell-web/2017/05/31/让D3绘制的力导向图发光/">让D3绘制的力导向图发光</a>
           </li>
         
       </ul>

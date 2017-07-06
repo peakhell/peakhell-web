@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>MySQL用户管理 | Peakhell的个人网站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="​    今天写了个爬虫, 想要使用MySQL数据库存储抓取的信息, 尴尬的发现自己忘记了密码, 嘛.谷歌一下总是会发现解决方法的, 但按照几个博客的方法看下来, 却意外的都出现了问题, 于是去MySQL官网看了看, 原来是由于MySQL的版本升级(现在是5.7.18版本), 有一些功能和字段已经有所改变, 这才导致那些博客的解决方法出现问题. 这里做个常用操作的总结, 权当笔记.当然, 只针对l">
+<meta name="keywords" content="MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL用户管理">
+<meta property="og:url" content="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/index.html">
+<meta property="og:site_name" content="Peakhell的个人网站">
+<meta property="og:description" content="​    今天写了个爬虫, 想要使用MySQL数据库存储抓取的信息, 尴尬的发现自己忘记了密码, 嘛.谷歌一下总是会发现解决方法的, 但按照几个博客的方法看下来, 却意外的都出现了问题, 于是去MySQL官网看了看, 原来是由于MySQL的版本升级(现在是5.7.18版本), 有一些功能和字段已经有所改变, 这才导致那些博客的解决方法出现问题. 这里做个常用操作的总结, 权当笔记.当然, 只针对l">
+<meta property="og:image" content="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/search.png">
+<meta property="og:image" content="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/sys.png">
+<meta property="og:updated_time" content="2017-07-06T12:07:33.504Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL用户管理">
+<meta name="twitter:description" content="​    今天写了个爬虫, 想要使用MySQL数据库存储抓取的信息, 尴尬的发现自己忘记了密码, 嘛.谷歌一下总是会发现解决方法的, 但按照几个博客的方法看下来, 却意外的都出现了问题, 于是去MySQL官网看了看, 原来是由于MySQL的版本升级(现在是5.7.18版本), 有一些功能和字段已经有所改变, 这才导致那些博客的解决方法出现问题. 这里做个常用操作的总结, 权当笔记.当然, 只针对l">
+<meta name="twitter:image" content="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/search.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Peakhell的个人网站" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/peakhell-web/fancybox/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/peakhell-web/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/peakhell-web/" id="logo">Peakhell的个人网站</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/peakhell-web/" id="subtitle">编程,围棋,故事</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/peakhell-web/">Home</a>
+        
+          <a class="main-nav-link" href="/peakhell-web/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://peakhell.github.io/peakhell-web"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-MySQL用户管理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/peakhell-web/2017/07/05/MySQL用户管理/" class="article-date">
+  <time datetime="2017-07-05T09:26:52.000Z" itemprop="datePublished">2017-07-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      MySQL用户管理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    今天写了个爬虫, 想要使用MySQL数据库存储抓取的信息, 尴尬的发现自己忘记了密码, 嘛.谷歌一下总是会发现解决方法的, 但按照几个博客的方法看下来, 却意外的都出现了问题, 于是去MySQL官网看了看, 原来是由于MySQL的版本升级(现在是5.7.18版本), 有一些功能和字段已经有所改变, 这才导致那些博客的解决方法出现问题. 这里做个常用操作的总结, 权当笔记.当然, 只针对linux操作系统.</p>
+<pre><code>1.  登录
+</code></pre><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -u username -p</div></pre></td></tr></table></figure>
+<p>登录是最简单的操作了, 上面的命令会让你输入用户的密码, 正确即可进入mysql了.</p>
+<ol>
+<li>创建新用户</li>
+</ol>
+<p>只有具有管理员身份的用户才能创建新用户, 最常见的就是root用户, 先使用root用户登录mysql:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -u root -p</div></pre></td></tr></table></figure>
+<p>然后选择mysql数据库, mysql 是一个自带的特殊数据库, 用来管理用户 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">use mysql;</div></pre></td></tr></table></figure>
+<p>创建新用户, 其中username是你要创建的用户名, password是你的密码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">create user &apos;username&apos;@&apos;localhost&apos; identified by &apos;password&apos;</div></pre></td></tr></table></figure>
+<p>让操作生效</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">flush privileges;</div></pre></td></tr></table></figure>
+<p>然后就可以使用新用户登录了.</p>
+<ol>
+<li>查询用户</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">use mysql;</div><div class="line">select user,host from mysql.user</div><div class="line">flush privileges;</div></pre></td></tr></table></figure>
+<p>这条命令会列出所有的用户名机其主机位置, 你会发现有两个特殊的用户名mysql.sys 和 debian-sys-maint, 这两个用户是系统自带的, 当我们忘记root密码时, 可以通过这两个账户登上去修改root密码</p>
+<p><img src="/peakhell-web/2017/07/05/MySQL用户管理/search.png" alt="search user"></p>
+<ol>
+<li>删除用户</li>
+</ol>
+<p>通过查询我们可以知道有哪些用户, 如果要删除某个用户的话, 可以用这个命令, 其中username是你要删除的用户.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">use mysql;</div><div class="line">delete from mysql.user where (user,host) in (select &apos;username&apos;,&apos;localhost&apos;);</div><div class="line">flush privileges;</div></pre></td></tr></table></figure>
+<ol>
+<li>修改密码</li>
+</ol>
+<p>有时候可能需要修改用户的密码, 可以用下面的命令,其中newpassword是你要设置的新密码, user是用户名, 特别要注意的是, 如果mysql的版本是5.5之前的, 则要把authentication 字段改成password.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">use mysql;</div><div class="line">update mysql.user set authentication_string=password(’newpassword’) where User=’user’;</div><div class="line">flush privileges;</div></pre></td></tr></table></figure>
+<ol>
+<li>忘记管理员密码</li>
+</ol>
+<p>到了重点了, 网上有很多关于找回root密码的方法, 但其实有一个很简单的方法可以找回来, 还记得我在上面讲的特殊用户mysql.sys 和 debian-sys-maint吗, 我们可以利用这个特殊的用户来修改mysql root用户的密码.linux 有个特殊的文件保存了debian-sys-maint这个用户密码的配置文件, 如果你拥有管理员权限就可以打开这个文件, 登录这个账号, 然后修改root用户的密码.具体的操作如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/mysql/debian.cnf</div></pre></td></tr></table></figure>
+<p>如果没有问题的话, 你会看到类似下面的文件.</p>
+<p><img src="/peakhell-web/2017/07/05/MySQL用户管理/sys.png" alt="search user"></p>
+<p>注意看遮住的那一栏, 那就是debian-sys-maint这个用户的密码, 接下来我们使用这个账号登录,密码就是上面遮住的那一栏</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -u debian-sys-maint -p</div></pre></td></tr></table></figure>
+<p>然后再使用上面所说的修改密码的方法修改root的密码即可.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/" data-id="cj4se16so0000z7cman2pvknu" class="article-share-link">Share</a>
+      
+        <a href="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/MySQL/">MySQL</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/peakhell-web/2017/06/29/jQuery笔记2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">jQuery笔记(2) - 常见的DOM操作</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/peakhell-web/categories/杂想/">杂想</a></li><li class="category-list-item"><a class="category-list-link" href="/peakhell-web/categories/编程/">编程</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/flask-python/">flask python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/python-virtualenv/">python virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/peakhell-web/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/peakhell-web/tags/flask-python/" style="font-size: 10px;">flask python</a> <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/jQuery/" style="font-size: 20px;">jQuery</a> <a href="/peakhell-web/tags/python-virtualenv/" style="font-size: 10px;">python virtualenv</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/05/">May 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/peakhell-web/2017/07/05/MySQL用户管理/">MySQL用户管理</a>
+          </li>
+        
+          <li>
+            <a href="/peakhell-web/2017/06/29/jQuery笔记2/">jQuery笔记(2) - 常见的DOM操作</a>
+          </li>
+        
+          <li>
+            <a href="/peakhell-web/2017/06/27/jQuery笔记/">jQuery笔记(1) - 常见的DOM操作</a>
+          </li>
+        
+          <li>
+            <a href="/peakhell-web/2017/06/19/一些常用的操作总结/">python3 虚拟环境常用操作</a>
+          </li>
+        
+          <li>
+            <a href="/peakhell-web/2017/06/09/Flask-Api-总结/">Flask Api 总结</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner" style="text-align:center;">
+      <table width="100%" border="0">
+        <tr>
+          <td style="text-align:left">
+            Copyright &copy; 2014-2017 peakhell &nbsp; &nbsp;
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+          </td>
+          <td style="text-align:right">
+            <div style="font-family: FontAwesome;font-size: 20px;">
+              <a href="http://weibo.com/3904642734" title="微博" target="_blank">&#61834;</a>&nbsp;
+              <a href="http://zhihu.com" title="QQ空间" target="_blank">&#61910;</a>&nbsp;
+              <a href="https://github.com/peakhell" title="GitHub" target="_blank">&#61595;</a>&nbsp;
+              <a href="https://plus.google.com/118157846818083514683" title="Google+" target="_blank">&#61653;</a>
+            </div><br>
+            <a href="/sitemap.xml">网站地图</a>&nbsp; &nbsp;
+            <a href="/atom.xml">订阅本站</a>&nbsp; &nbsp;
+            <a href="mailto:hsgaomail.gmail.com" target="_blank">联系博主</a>&nbsp; &nbsp;
+            ICP 备案呵呵
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/peakhell-web/" class="mobile-nav-link">Home</a>
+  
+    <a href="/peakhell-web/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'https-peakhell-github-io-peakhell-web';
+  
+  var disqus_url = 'https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/peakhell-web/fancybox/jquery.fancybox.css">
+  <script src="/peakhell-web/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/peakhell-web/js/script.js"></script>
+
+  </div>
+</body>
+</html>
