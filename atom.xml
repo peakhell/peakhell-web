@@ -5,7 +5,7 @@
   <link href="/peakhell-web/atom.xml" rel="self"/>
   
   <link href="https://peakhell.github.io/peakhell-web/"/>
-  <updated>2017-07-06T12:07:33.504Z</updated>
+  <updated>2017-07-06T12:10:59.153Z</updated>
   <id>https://peakhell.github.io/peakhell-web/</id>
   
   <author>
@@ -20,11 +20,13 @@
     <link href="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86/"/>
     <id>https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/</id>
     <published>2017-07-05T09:26:52.000Z</published>
-    <updated>2017-07-06T12:07:33.504Z</updated>
+    <updated>2017-07-06T12:10:59.153Z</updated>
     
     <content type="html"><![CDATA[<p>​    今天写了个爬虫, 想要使用MySQL数据库存储抓取的信息, 尴尬的发现自己忘记了密码, 嘛.谷歌一下总是会发现解决方法的, 但按照几个博客的方法看下来, 却意外的都出现了问题, 于是去MySQL官网看了看, 原来是由于MySQL的版本升级(现在是5.7.18版本), 有一些功能和字段已经有所改变, 这才导致那些博客的解决方法出现问题. 这里做个常用操作的总结, 权当笔记.当然, 只针对linux操作系统.</p>
-<pre><code>1.  登录
-</code></pre><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -u username -p</div></pre></td></tr></table></figure>
+<ol>
+<li>登录</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -u username -p</div></pre></td></tr></table></figure>
 <p>登录是最简单的操作了, 上面的命令会让你输入用户的密码, 正确即可进入mysql了.</p>
 <ol>
 <li>创建新用户</li>

@@ -14,7 +14,7 @@
 <meta property="og:description" content="​    今天写了个爬虫, 想要使用MySQL数据库存储抓取的信息, 尴尬的发现自己忘记了密码, 嘛.谷歌一下总是会发现解决方法的, 但按照几个博客的方法看下来, 却意外的都出现了问题, 于是去MySQL官网看了看, 原来是由于MySQL的版本升级(现在是5.7.18版本), 有一些功能和字段已经有所改变, 这才导致那些博客的解决方法出现问题. 这里做个常用操作的总结, 权当笔记.当然, 只针对l">
 <meta property="og:image" content="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/search.png">
 <meta property="og:image" content="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/sys.png">
-<meta property="og:updated_time" content="2017-07-06T12:07:33.504Z">
+<meta property="og:updated_time" content="2017-07-06T12:10:59.153Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL用户管理">
 <meta name="twitter:description" content="​    今天写了个爬虫, 想要使用MySQL数据库存储抓取的信息, 尴尬的发现自己忘记了密码, 嘛.谷歌一下总是会发现解决方法的, 但按照几个博客的方法看下来, 却意外的都出现了问题, 于是去MySQL官网看了看, 原来是由于MySQL的版本升级(现在是5.7.18版本), 有一些功能和字段已经有所改变, 这才导致那些博客的解决方法出现问题. 这里做个常用操作的总结, 权当笔记.当然, 只针对l">
@@ -94,8 +94,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>​    今天写了个爬虫, 想要使用MySQL数据库存储抓取的信息, 尴尬的发现自己忘记了密码, 嘛.谷歌一下总是会发现解决方法的, 但按照几个博客的方法看下来, 却意外的都出现了问题, 于是去MySQL官网看了看, 原来是由于MySQL的版本升级(现在是5.7.18版本), 有一些功能和字段已经有所改变, 这才导致那些博客的解决方法出现问题. 这里做个常用操作的总结, 权当笔记.当然, 只针对linux操作系统.</p>
-<pre><code>1.  登录
-</code></pre><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -u username -p</div></pre></td></tr></table></figure>
+<ol>
+<li>登录</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -u username -p</div></pre></td></tr></table></figure>
 <p>登录是最简单的操作了, 上面的命令会让你输入用户的密码, 正确即可进入mysql了.</p>
 <ol>
 <li>创建新用户</li>
@@ -139,7 +141,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/" data-id="cj4se16so0000z7cman2pvknu" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/" data-id="cj4se5ihb00045wcmziclticq" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/#disqus_thread" class="article-comment-link">Comments</a>
       
