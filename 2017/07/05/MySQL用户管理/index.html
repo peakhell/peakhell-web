@@ -14,7 +14,7 @@
 <meta property="og:description" content="​    今天写了个爬虫, 想要使用MySQL数据库存储抓取的信息, 尴尬的发现自己忘记了密码, 嘛.谷歌一下总是会发现解决方法的, 但按照几个博客的方法看下来, 却意外的都出现了问题, 于是去MySQL官网看了看, 原来是由于MySQL的版本升级(现在是5.7.18版本), 有一些功能和字段已经有所改变, 这才导致那些博客的解决方法出现问题. 这里做个常用操作的总结, 权当笔记.当然, 只针对l">
 <meta property="og:image" content="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/search.png">
 <meta property="og:image" content="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/sys.png">
-<meta property="og:updated_time" content="2017-07-06T12:10:59.153Z">
+<meta property="og:updated_time" content="2017-07-06T12:12:55.418Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL用户管理">
 <meta name="twitter:description" content="​    今天写了个爬虫, 想要使用MySQL数据库存储抓取的信息, 尴尬的发现自己忘记了密码, 嘛.谷歌一下总是会发现解决方法的, 但按照几个博客的方法看下来, 却意外的都出现了问题, 于是去MySQL官网看了看, 原来是由于MySQL的版本升级(现在是5.7.18版本), 有一些功能和字段已经有所改变, 这才导致那些博客的解决方法出现问题. 这里做个常用操作的总结, 权当笔记.当然, 只针对l">
@@ -60,9 +60,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://peakhell.github.io/peakhell-web"></form>
@@ -116,7 +116,7 @@
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">use mysql;</div><div class="line">select user,host from mysql.user</div><div class="line">flush privileges;</div></pre></td></tr></table></figure>
 <p>这条命令会列出所有的用户名机其主机位置, 你会发现有两个特殊的用户名mysql.sys 和 debian-sys-maint, 这两个用户是系统自带的, 当我们忘记root密码时, 可以通过这两个账户登上去修改root密码</p>
-<p><img src="/peakhell-web/2017/07/05/MySQL用户管理/search.png" alt="search user"></p>
+<p><img src="/peakhell-web/2017/07/05/MySQL用户管理/search.png" alt="查看用户"></p>
 <ol>
 <li>删除用户</li>
 </ol>
@@ -133,7 +133,7 @@
 <p>到了重点了, 网上有很多关于找回root密码的方法, 但其实有一个很简单的方法可以找回来, 还记得我在上面讲的特殊用户mysql.sys 和 debian-sys-maint吗, 我们可以利用这个特殊的用户来修改mysql root用户的密码.linux 有个特殊的文件保存了debian-sys-maint这个用户密码的配置文件, 如果你拥有管理员权限就可以打开这个文件, 登录这个账号, 然后修改root用户的密码.具体的操作如下</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/mysql/debian.cnf</div></pre></td></tr></table></figure>
 <p>如果没有问题的话, 你会看到类似下面的文件.</p>
-<p><img src="/peakhell-web/2017/07/05/MySQL用户管理/sys.png" alt="search user"></p>
+<p><img src="/peakhell-web/2017/07/05/MySQL用户管理/sys.png" alt="查看密码"></p>
 <p>注意看遮住的那一栏, 那就是debian-sys-maint这个用户的密码, 接下来我们使用这个账号登录,密码就是上面遮住的那一栏</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -u debian-sys-maint -p</div></pre></td></tr></table></figure>
 <p>然后再使用上面所说的修改密码的方法修改root的密码即可.</p>
@@ -141,9 +141,9 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/" data-id="cj4se5ihb00045wcmziclticq" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/" data-id="cj4se84n60002alcmnu5k09q4" class="article-share-link">Partager</a>
       
-        <a href="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/#disqus_thread" class="article-comment-link">Comments</a>
+        <a href="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/#disqus_thread" class="article-comment-link">Commentaires</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/MySQL/">MySQL</a></li></ul>
@@ -156,7 +156,7 @@
   
   
     <a href="/peakhell-web/2017/06/29/jQuery笔记2/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
+      <strong class="article-nav-caption">Ancien</strong>
       <div class="article-nav-title">jQuery笔记(2) - 常见的DOM操作</div>
     </a>
   
@@ -177,7 +177,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
+    <h3 class="widget-title">Catégories</h3>
     <div class="widget">
       <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/peakhell-web/categories/杂想/">杂想</a></li><li class="category-list-item"><a class="category-list-link" href="/peakhell-web/categories/编程/">编程</a></li></ul>
     </div>
@@ -187,7 +187,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
+    <h3 class="widget-title">Mot-clés</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/flask-python/">flask python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/python-virtualenv/">python virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
     </div>
@@ -197,7 +197,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">Nuage de mot-clés</h3>
     <div class="widget tagcloud">
       <a href="/peakhell-web/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/peakhell-web/tags/flask-python/" style="font-size: 10px;">flask python</a> <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/jQuery/" style="font-size: 20px;">jQuery</a> <a href="/peakhell-web/tags/python-virtualenv/" style="font-size: 10px;">python virtualenv</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a>
     </div>
@@ -216,7 +216,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         

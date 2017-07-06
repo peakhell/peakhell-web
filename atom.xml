@@ -5,7 +5,7 @@
   <link href="/peakhell-web/atom.xml" rel="self"/>
   
   <link href="https://peakhell.github.io/peakhell-web/"/>
-  <updated>2017-07-06T12:10:59.153Z</updated>
+  <updated>2017-07-06T12:12:55.418Z</updated>
   <id>https://peakhell.github.io/peakhell-web/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86/"/>
     <id>https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/</id>
     <published>2017-07-05T09:26:52.000Z</published>
-    <updated>2017-07-06T12:10:59.153Z</updated>
+    <updated>2017-07-06T12:12:55.418Z</updated>
     
     <content type="html"><![CDATA[<p>​    今天写了个爬虫, 想要使用MySQL数据库存储抓取的信息, 尴尬的发现自己忘记了密码, 嘛.谷歌一下总是会发现解决方法的, 但按照几个博客的方法看下来, 却意外的都出现了问题, 于是去MySQL官网看了看, 原来是由于MySQL的版本升级(现在是5.7.18版本), 有一些功能和字段已经有所改变, 这才导致那些博客的解决方法出现问题. 这里做个常用操作的总结, 权当笔记.当然, 只针对linux操作系统.</p>
 <ol>
@@ -45,7 +45,7 @@
 </ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">use mysql;</div><div class="line">select user,host from mysql.user</div><div class="line">flush privileges;</div></pre></td></tr></table></figure>
 <p>这条命令会列出所有的用户名机其主机位置, 你会发现有两个特殊的用户名mysql.sys 和 debian-sys-maint, 这两个用户是系统自带的, 当我们忘记root密码时, 可以通过这两个账户登上去修改root密码</p>
-<p><img src="/peakhell-web/2017/07/05/MySQL用户管理/search.png" alt="search user"></p>
+<p><img src="/peakhell-web/2017/07/05/MySQL用户管理/search.png" alt="查看用户"></p>
 <ol>
 <li>删除用户</li>
 </ol>
@@ -62,7 +62,7 @@
 <p>到了重点了, 网上有很多关于找回root密码的方法, 但其实有一个很简单的方法可以找回来, 还记得我在上面讲的特殊用户mysql.sys 和 debian-sys-maint吗, 我们可以利用这个特殊的用户来修改mysql root用户的密码.linux 有个特殊的文件保存了debian-sys-maint这个用户密码的配置文件, 如果你拥有管理员权限就可以打开这个文件, 登录这个账号, 然后修改root用户的密码.具体的操作如下</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vim /etc/mysql/debian.cnf</div></pre></td></tr></table></figure>
 <p>如果没有问题的话, 你会看到类似下面的文件.</p>
-<p><img src="/peakhell-web/2017/07/05/MySQL用户管理/sys.png" alt="search user"></p>
+<p><img src="/peakhell-web/2017/07/05/MySQL用户管理/sys.png" alt="查看密码"></p>
 <p>注意看遮住的那一栏, 那就是debian-sys-maint这个用户的密码, 接下来我们使用这个账号登录,密码就是上面遮住的那一栏</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql -u debian-sys-maint -p</div></pre></td></tr></table></figure>
 <p>然后再使用上面所说的修改密码的方法修改root的密码即可.</p>
