@@ -68,6 +68,121 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-读书笔记之JavaScript语言精粹" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/peakhell-web/2017/09/01/读书笔记之JavaScript语言精粹/" class="article-date">
+  <time datetime="2017-09-01T01:43:49.000Z" itemprop="datePublished">2017-09-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/peakhell-web/2017/09/01/读书笔记之JavaScript语言精粹/">读书笔记之JavaScript语言精粹</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​       作为一个前端开发人员,  js的一些坑已经踩了不少, 但这本书总结的非常好, 把精华部分和糟粕部分都非常系统详细的列出来, 个人认为附录部分的js毒瘤与糟粕非常值得一读, 如果你是刚开始接触js, 那就更值得你好好看看了, 绝对能少踩很多坑. 这里做个读书笔记, 总结一下这本书的附录部分, 也就是js的坑.</p>
+<ul>
+<li><p>全局变量</p>
+<p>对全局变量的依赖可能是JavaScript最糟糕的特性. 很多编程语言也有全局变量, 例如Java使用public static 关键字定义全局变量, 但在JavaScript中, 由于没有连接器(linker), 所有的编译单元都在如到一个公共全局对象中(也就是window对象). 也许在小型程序中这会带来很多便利, 但当程序变得复杂时, 全局变量便会使程序变得难以维护, 因为无论在全局哪一个地方更改全局变量的值, 全局变量都会改变. 更糟糕的是如果我们没有使用var关键字进行变量的定义, JavaScript会默认该变量为全局变量, 不管在程序的哪个地方.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  globle = <span class="number">10</span>;</div><div class="line">&#125;</div><div class="line">test();</div><div class="line"><span class="built_in">console</span>.log(globle)   <span class="comment">//10</span></div></pre></td></tr></table></figure>
+<p>由于globle没有用var关键字修饰, JavaScript会把globle当成全局变量, 导致在函数外也可以使用. 这是一个非常糟糕的设计, 因此生命变量时, 一定要在前面加关键字 var. </p>
+<p>​</p>
+</li>
+<li><p>作用域</p>
+<p>JavaScript与C语言类似, 都是用{}来表示代码块. 但糟糕的是, 与C语言不同, JavaScript没有提供相应的块级作用域, 也就是说, 代码块中生命的变量在包含此码块的函数的任何位置都是可见的, 听起来十分拗口, 举个例子就好懂多了. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;<span class="number">5</span>; i++)&#123;</div><div class="line">  <span class="keyword">var</span> g = i;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(g)  <span class="comment">//4</span></div></pre></td></tr></table></figure>
+<p>for循环中的变量 g 是属于块级代码, 但在全局中却可以调用. 这就是 js 的作用域问题, 与之相对的是C语言的块级作用域. 先看以下代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">   <span class="keyword">int</span> i = <span class="number">2</span>;</div><div class="line">   <span class="keyword">if</span> (i)&#123;</div><div class="line">   <span class="keyword">int</span> j = <span class="number">10</span>;</div><div class="line">&#125;</div><div class="line"><span class="built_in">printf</span>(j);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行这段代码, 编译器会报错. error: ‘j’ was not declared in this scope. 这是由于j是在块级作用域if语句里面的. 所以在全局中式无法使用的. </p>
+<p>因此在JavaScript中要注意这一点, 由于js的这个特性, 我们最好在每个函数的开头部分就生命所有的变量.</p>
+<p>​</p>
+</li>
+<li><p>自动插入分号</p>
+<p>JavaScript并不强制使用 分号 作为一个语句的结尾, 但当你忘记在语句中使用 分号做为结尾时, 它会自动插入分号来试图修正程序. 注意了, 这个特性可能会出现一些神奇的问题. 例如以下的 return 语句.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">return</span> </div><div class="line">&#123;</div><div class="line">  <span class="attr">type</span>: <span class="number">1</span>,</div><div class="line">  <span class="attr">msg</span>: <span class="string">"ok"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的代码看似返回一个包含元素的对象, 但由于JavaScript自动插入分号的特性, 实际执行的代码已经变成了</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">return</span>; </div><div class="line">&#123;</div><div class="line">  <span class="attr">type</span>: <span class="number">1</span>,</div><div class="line">  <span class="attr">msg</span>: <span class="string">"ok"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样就导致返回值变成了 undefined, 一定要注意, 上例正确的写法应该把　“{“ 　放在上一行，也就是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">return</span> &#123;</div><div class="line">  <span class="attr">type</span>: <span class="number">1</span>,</div><div class="line">  <span class="attr">msg</span>: <span class="string">"ok"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>typeof </p>
+<p>typeof 运算符可以用来识别变量或常量的类型．大部分情况下它是可以正常判断的, 但是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">type <span class="literal">null</span>;     <span class="comment">// object</span></div></pre></td></tr></table></figure>
+<p>返回的是object 而不是 null ! 这一点千万注意．我们可以用其他的方法来判断一个变量是否为null，最简单的方法就是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">value === <span class="literal">null</span>;</div></pre></td></tr></table></figure>
+<p>不知道你有没有注意到，由于typeof无法判断object 和null, 因此判断一个变量是否为object时，一定要再三小心．</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typeof</span> value === <span class="string">'object'</span>;    <span class="comment">//错误的判断方法</span></div><div class="line">value &amp;&amp; type value === <span class="string">'object'</span>;  <span class="comment">// 正确，先判断是否为ｎｕｌｌ</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>parseInt</p>
+<p>曾经我在面试的时候遇到过一道经典的JavaScript题，至今让我印象深刻．</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> arr = [<span class="string">'1'</span>, <span class="string">'2'</span>, <span class="string">'3'</span>, <span class="string">'4'</span>, <span class="string">'5'</span>];</div><div class="line"><span class="keyword">var</span> num;</div><div class="line">num = arr.map(<span class="built_in">parseInt</span>);</div></pre></td></tr></table></figure>
+<p>很简单的代码，就是把arr数组中的元素转化成整数，理论上来说应该是［１，２，３，４，５］, 是的，理论上．然而实际结果确实是[1, NaN, NaN, NaN, NaN]．其实原因也不难，就是因为 parseInt 方法其实是可以带两个参数的，第一个参数是要转化成数字的字符串，另一个是指定进制，默认是使用十进制来进行转换，这里举两个例子说明一下．</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">parseInt</span>(<span class="string">'10'</span>, <span class="number">8</span>);  <span class="comment">// 8</span></div><div class="line"><span class="built_in">parseInt</span>(<span class="string">'10'</span>);     <span class="comment">// 10</span></div></pre></td></tr></table></figure>
+<p>我想你已经知道问题所在了，还不知道？再看看ｍａｐ方法的语法．</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> new_array = arr.map(<span class="function"><span class="keyword">function</span> <span class="title">callback</span>(<span class="params">currentValue, index, array</span>) </span>&#123;</div><div class="line">    <span class="comment">// Return element for new_array</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>也就是说，实际运行过程中数组的索引会被当成parseInt的第二个参数．也就是像下面这样．所以就会出现这样看似不合理的结果了．要避免这种情况也不难，把　parseInt 换成　Number 就可以了．</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">parseInt</span>(<span class="string">'1'</span>,<span class="number">0</span>);</div><div class="line"><span class="built_in">parseInt</span>(<span class="string">'2'</span>,<span class="number">1</span>);</div><div class="line"><span class="built_in">parseInt</span>(<span class="string">'3'</span>,<span class="number">2</span>);</div><div class="line">...</div></pre></td></tr></table></figure>
+</li>
+<li><p>浮点数</p>
+<p>这个其实不算坑，只是需要注意一下，先看下面的例子．</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">0.1</span>+<span class="number">0.2</span>; <span class="comment">// 0.30000000000000004</span></div></pre></td></tr></table></figure>
+<p>第一次看到这个结果的时候我也吓了一跳，但其实原因很简单，因为ＣＰＵ的计算其实都是二进制的，而二进制的浮点数不能正确的处理十进制的小数点，说以会导致计算结果不精准，这不仅是ＪａｖａＳｃｒｉｐｔ的问题，很多编程语言也有同样的问题，像ｐｙｔｈｏｎ，ｊａｖａ等．幸运地是，整数是可以完美处理的．对于有小数点的运算，我们可以指定计算精度来避免这样的问题．</p>
+</li>
+<li><p>ＮａＮ</p>
+<p>不得不说这是ＪａｖａＳｃｒｉｐｔ中一个奇葩的变量类型，它表示一个特殊的数量值，它不代表一个数字，当数学表达式无法计算时会用ＮａＮ表示，亦或者把非数字形式的字符串转换成数字时．但</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typeof</span> <span class="literal">NaN</span> === <span class="string">'number'</span>; <span class="comment">// true</span></div></pre></td></tr></table></figure>
+<p>也就是说typeof 是无法辨认数字与ＮａＮ的（要你有何用！），更恶心的是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="literal">NaN</span> === <span class="literal">NaN</span>; <span class="comment">// false</span></div></pre></td></tr></table></figure>
+<p>真的无话可说，发明ＮａＮ这个变量绝对是设计者脑抽了．要判断一个变量只能用一个方法；</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">isNaN</span>(<span class="literal">NaN</span>); <span class="comment">//true</span></div></pre></td></tr></table></figure>
+<p>延伸一下，由于上面的问题，我们是无法直接用 typeof 方法来判断一个变量是不是数字的．千万要注意，别掉坑里了，我们可以加一个判断．</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typeof</span> value === <span class="string">'number'</span> &amp;&amp; <span class="built_in">isFinite</span>(value);</div></pre></td></tr></table></figure>
+</li>
+<li><p>数组</p>
+<p>ＪａｖａScript 中没有真正的数组，ＪａｖａScript 中没有真正的数组，ＪａｖａScript 中没有真正的数组．重要的事情说三遍．在　JavaScript 中，一切皆为对象，数组其实是一个有length的对象．这并不都是坏事，由于这个特性，你不必给数组设置维度，也不用担心越界错误（但其实这更容易导致出现隐藏的ｂｕｇ）．但这也导致其性能下降的厉害．同理的，你也无法用ｔｙｐｅｏｆ直接判断一个变量是否为数组（ｔｙｐｅｏｆ要你有何用！！），你需要检查一个名作constructor的属性．</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typeof</span> value === <span class="string">'object'</span> &amp;&amp; value.constructor === <span class="built_in">Array</span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>对象</p>
+<p>是的，JavaScript 的对象也是要我们注意的．与python, java　不同，　ＪavaScript 中的对象不是通过类来定义的，而是通过原型链．因此，当你创建一个空对象时，该对象绝对不是空的，而是包含了从上一级中继承下来的各种方法与属性，这在有时候会导致问题变得很麻烦．举个例子，你现在在做一个文本分析脚本，首先需要统计一篇文章中每个单词出现的个数，这个时候就要十分小心了．先看下面的代码．</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> text = <span class="string">"To deal with this, you can generate a stack trace in the constructor of the exception object during the throw exception statement. "</span>;</div><div class="line"><span class="keyword">var</span> words = text.toLowerCase().split(<span class="regexp">/[\s,.]+/</span>)</div><div class="line"><span class="keyword">var</span> count = &#123;&#125;;</div><div class="line"><span class="keyword">var</span> word;</div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;words.length;i++)&#123;</div><div class="line">  word = words[i];</div><div class="line">  <span class="keyword">if</span> (count[word])&#123;</div><div class="line">    count[word] += <span class="number">1</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">else</span>&#123;</div><div class="line">    count[word] = <span class="number">1</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的代码很简单，就是统计一下每个单词出现的次数，但如果查看 count.constructor,你会发现 输出了这个鬼东西：”function Object() { [native code] }1”，原因就是上面所说的，ｃｏｕｎｔ对象继承自Ｏbject.prototype．而Ｏbject.prototype 中包含着一个constructor的对象．如何避免这个问题呢，我们可以做一个判断，检测成员类型，是数字才进行处理．</p>
+</li>
+<li><p>其他</p>
+<p>接下来的东西就不细讲了，都是不建议使用的．</p>
+<p>＝＝　这个不用说了吧，大家都知道</p>
+<p>with　别用</p>
+<p>eval     有坑，用前详细查看文档．</p>
+<p>​</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/09/01/读书笔记之JavaScript语言精粹/" data-id="cj75lf5vz000klmcm54ffkn70" class="article-share-link">Share</a>
+      
+        <a href="https://peakhell.github.io/peakhell-web/2017/09/01/读书笔记之JavaScript语言精粹/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/JavaScript/">JavaScript</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-MySQL用户管理" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/peakhell-web/2017/07/05/MySQL用户管理/" class="article-date">
@@ -138,7 +253,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/" data-id="cj53hvl3a0004v2cmqotknohj" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/" data-id="cj75lf5vk0002lmcmyp7yd1cd" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/07/05/MySQL用户管理/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -237,7 +352,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/29/jQuery笔记2/" data-id="cj53hvl3e000cv2cmio8yh0ff" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/29/jQuery笔记2/" data-id="cj75lf5vt000almcmowmhuru1" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/06/29/jQuery笔记2/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -392,7 +507,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/" data-id="cj53hvl3d000av2cmb3509jer" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/" data-id="cj75lf5vs0007lmcmdctz1yh7" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/06/27/jQuery笔记/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -461,7 +576,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/" data-id="cj53hvl3h000iv2cmi3bkm8es" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/" data-id="cj75lf5vu000blmcmibcxmg1y" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/06/19/一些常用的操作总结/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -543,7 +658,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/" data-id="cj53hvl310001v2cmdm9c0vl5" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/" data-id="cj75lf5vi0001lmcmv5bv69s1" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/06/09/Flask-Api-总结/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -583,7 +698,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/" data-id="cj53hvl3g000fv2cm53iz7c05" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/" data-id="cj75lf5vx000hlmcmldzsp4tc" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/05/31/让D3绘制的力导向图发光/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -629,7 +744,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/" data-id="cj53hvl3b0006v2cmew6begpb" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/" data-id="cj75lf5vw000elmcmfb17j0w4" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/05/18/写给快要毕业的自己/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -693,7 +808,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/" data-id="cj53hvl3c0007v2cmh7p7biyc" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/" data-id="cj75lf5vr0005lmcmj6ytm2co" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -784,7 +899,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/" data-id="cj53hvl330002v2cm6yzorvkx" class="article-share-link">Share</a>
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/" data-id="cj75lf5vo0004lmcm96iwiv4e" class="article-share-link">Share</a>
       
         <a href="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/#disqus_thread" class="article-comment-link">Comments</a>
       
@@ -817,7 +932,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/flask-python/">flask python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/python-virtualenv/">python virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/flask-python/">flask python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/python-virtualenv/">python virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li></ul>
     </div>
   </div>
 
@@ -827,7 +942,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/peakhell-web/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/peakhell-web/tags/flask-python/" style="font-size: 10px;">flask python</a> <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/jQuery/" style="font-size: 20px;">jQuery</a> <a href="/peakhell-web/tags/python-virtualenv/" style="font-size: 10px;">python virtualenv</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a>
+      <a href="/peakhell-web/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/peakhell-web/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/peakhell-web/tags/flask-python/" style="font-size: 10px;">flask python</a> <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/jQuery/" style="font-size: 20px;">jQuery</a> <a href="/peakhell-web/tags/python-virtualenv/" style="font-size: 10px;">python virtualenv</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a>
     </div>
   </div>
 
@@ -836,7 +951,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/05/">May 2017</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/05/">May 2017</a></li></ul>
     </div>
   </div>
 
@@ -847,6 +962,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/peakhell-web/2017/09/01/读书笔记之JavaScript语言精粹/">读书笔记之JavaScript语言精粹</a>
+          </li>
         
           <li>
             <a href="/peakhell-web/2017/07/05/MySQL用户管理/">MySQL用户管理</a>
@@ -862,10 +981,6 @@
         
           <li>
             <a href="/peakhell-web/2017/06/19/一些常用的操作总结/">python3 虚拟环境常用操作</a>
-          </li>
-        
-          <li>
-            <a href="/peakhell-web/2017/06/09/Flask-Api-总结/">Flask Api 总结</a>
           </li>
         
       </ul>
