@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Mot-clé: 故事 | Peakhell的个人网站</title>
+  <title>Peakhell的个人网站</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="python,javascript">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Peakhell的个人网站">
-<meta property="og:url" content="https://peakhell.github.io/peakhell-web/tags/故事/index.html">
+<meta property="og:url" content="https://peakhell.github.io/peakhell-web/page/2/index.html">
 <meta property="og:site_name" content="Peakhell的个人网站">
 <meta property="og:description" content="python,javascript">
 <meta name="twitter:card" content="summary">
@@ -68,38 +68,102 @@
       <div class="outer">
         <section id="main">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/peakhell-web/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/peakhell-web/2017/05/18/写给快要毕业的自己/" class="archive-article-date">
-  <time datetime="2017-05-18T03:46:24.000Z" itemprop="datePublished">May 18</time>
+    <article id="post-git常用操作1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/peakhell-web/2017/05/05/git常用操作1/" class="article-date">
+  <time datetime="2017-05-05T07:19:40.000Z" itemprop="datePublished">2017-05-05</time>
 </a>
-      
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/peakhell-web/categories/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/peakhell-web/2017/05/18/写给快要毕业的自己/">写给快要毕业的自己</a>
+      <a class="article-title" href="/peakhell-web/2017/05/05/git常用操作1/">git常用操作1</a>
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p> Git 是一个非常优秀的版本控制系统。最近在项目中常常用到Git，因此总结了这段时间常用到的操作与踩过的坑，当做一个学习笔记。</p>
+<ol>
+<li><p><strong>添加多个文件</strong></p>
+<p> 在git中添加单个文件很简单，用下面的命令就可以了。</p>
+<p> <code>git add &lt;filename&gt;</code></p>
+<p> 但有时候我们可能一次性修改了很多文件，这时候一个一个添加显然不太可行，所幸git提供了提交多个文件的命令。</p>
+<p> <code>git add .</code> 添加该目录下所有文件，但不包括删除的文件（常用）</p>
+<p> <code>git add -A</code> 添加该目录下所有文件</p>
+<p> 常用的添加多个文件的命令就上面两个，注意其中细微的区别。当然，大多数情况下用起来是一样的。只有当你用过</p>
+<p> <code>git rm &lt;filename&gt;</code>删除文件后才有细微的区别。具体的区别看<a href="http://stackoverflow.com/questions/572549/difference-between-git-add-a-and-git-add" target="_blank" rel="external">这里</a> ,一般用不到，我也就不细讲了。</p>
+</li>
+<li><p><strong>版本切换</strong></p>
+<p>提交多次之后，有时候可能对当前的开发不满意，想回退到上一个版本。git中用HEAD表示当前版本，上一次提交的版本是HEAD^,上上次提交的版本是HEAD^^,以此类推。那么想要回到上一次提交的命令就是</p>
+<p><code>git reset --hard HEAD^</code></p>
+</li>
+</ol>
+<p>等等，这样版本回退一两次还行，但是我已经忘记了要回退多少次怎么办？有办法的，首先使用命令<code>git log</code>查看提交的历史，以我的项目为例子，大概是这样子的。</p>
+<p><img src="/peakhell-web/2017/05/05/git常用操作1/gitlog.png" alt="gitlog">gitlog</p>
+<p> 找到你想要回退的那个版本，然后注意上面有个十六进制码commit id，这个是每次提交时git赋予的唯一标志码。使用这个就可以会退到想要回退的版本了。例如我们会退到“add gitignore file”那个版本。可以使用下面的命令。</p>
+<p> <code>git reset --hard e9dadb</code></p>
+<p> 注意不用写全，写前几位即可。当提交次数非常多时，这样查看可能就不太方便了，因为信息太多。我们可以让他在一行显示。</p>
+<p> <code>git log --pertty=oneline</code></p>
+<p> 效果大概是这样的</p>
+<p><img src="/peakhell-web/2017/05/05/git常用操作1/oneline.png" alt="git log oneline">git log oneline</p>
+<p> 要是我现在又反悔了，想要回到最新版本开发怎么办？先试试使用<code>git log</code>查看一下</p>
+<p><img src="/peakhell-web/2017/05/05/git常用操作1/gitlog2.png" alt="git log 查看提交记录">git log 查看提交记录</p>
+<p> 最新的提交记录不见了，怎么办？放心，在git中总是有后悔药可以吃的。git 提供了另一个命令，可以按时间查看提交记录。那就是reflog。我们用这个命令查看一下</p>
+<p> <code>git reflog</code></p>
+<p> 可以看到，最新的一次提交又出现了，接下来找到对应的commit id，再reset回去就好了。</p>
+<p><img src="/peakhell-web/2017/05/05/git常用操作1/gitreflog.png" alt="git reflog"></p>
+<p> 这个例子要回到最新的一个版本就是</p>
+<p> <code>git reset --hard fb62</code></p>
+<p> 总之，版本的切换命令用<code>git reset --hard &lt;commit id&gt;</code> ，而要找到对应提交的commit id 可以用<code>git log</code>和<code>git reflog</code> 。 如果记得要回到前几个版本，则可以用 <code>git reset --hard HEAD^</code> 。回退几个版本用几个^。</p>
+<ol>
+<li><strong>撤销修改与撤销添加</strong></li>
+</ol>
+<p><strong>撤销修改</strong></p>
+<p> 设想你正在开发一个功能, 经过了一个上午的奋斗,你终于成功的开发了出来, 正当你准备提交的时候, 产品经理跟你说,这个功能取消吧,经费不够.操蛋虽操蛋,但该改还得改.如果你只修改了一个文件,可以这样</p>
+<p> <code>git checkout -- &lt;filename&gt;</code></p>
+<p> 如果是多个文件,那就用这个就行了.</p>
+<p> <code>git checkout -- .</code></p>
+<p>​</p>
+<p><strong>撤销添加</strong></p>
+<p> 非常不幸的,当你收到消息时,你已经添加了这个功能,但还好,还没有commit上去,这时候就要撤销添加了.</p>
+<p> <code>git reset HEAD &lt;filename&gt;</code></p>
+<p> 多个文件时,可以这样</p>
+<p> <code>git reset HEAD .</code></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/" data-id="cj8tn975k00041lcmcyriqjnc" class="article-share-link">Partager</a>
+      
+        <a href="https://peakhell.github.io/peakhell-web/2017/05/05/git常用操作1/#disqus_thread" class="article-comment-link">Commentaires</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/git/">git</a></li></ul>
+
+    </footer>
   </div>
+  
 </article>
-  
-  
-    </div></section>
+
+
   
 
+
+  <nav id="page-nav">
+    <a class="extend prev" rel="prev" href="/peakhell-web/">&laquo; __('prev')</a><a class="page-number" href="/peakhell-web/">1</a><span class="page-number current">2</span>
+  </nav>
 </section>
         
           <aside id="sidebar">
