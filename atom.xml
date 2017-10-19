@@ -5,7 +5,7 @@
   <link href="/peakhell-web/atom.xml" rel="self"/>
   
   <link href="https://peakhell.github.io/peakhell-web/"/>
-  <updated>2017-10-13T03:29:10.059Z</updated>
+  <updated>2017-10-19T06:48:04.382Z</updated>
   <id>https://peakhell.github.io/peakhell-web/</id>
   
   <author>
@@ -14,6 +14,53 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>爬虫登录站点那点事</title>
+    <link href="https://peakhell.github.io/peakhell-web/2017/10/18/%E7%88%AC%E8%99%AB%E7%99%BB%E5%BD%95%E7%AB%99%E7%82%B9%E9%82%A3%E7%82%B9%E4%BA%8B/"/>
+    <id>https://peakhell.github.io/peakhell-web/2017/10/18/爬虫登录站点那点事/</id>
+    <published>2017-10-18T02:24:54.000Z</published>
+    <updated>2017-10-19T06:48:04.382Z</updated>
+    
+    <content type="html"><![CDATA[<p>​    最近在学习使用Python进行网络数据采集, 研究了一下站点登录的模拟, 发现还是有很多有趣的东西的, 所以做个笔记, 跟有缘人分享一下(如果你能看到这篇文章的话).</p>
+<p>​    <strong>从登录github说起</strong></p>
+<p>​    作为全球最大的同性交友网站, 自然有很多资源值得下载和收藏, 于是想用Python写个爬虫抓取一些信息.首先打开github的官网, 审核一下登录页面.</p>
+<p>​    <img src="/peakhell-web/2017/10/18/爬虫登录站点那点事/login_page.png" alt="登录页面"></p>
+<p><img src="/peakhell-web/2017/10/18/爬虫登录站点那点事/html.png" alt="登录表单"></p>
+<p>​    从登录界面上看, 请求数据只有用户名或者邮箱以及对应的密码, 从审核的元素可以看出, 请求数据是发送给 <a href="https://github.com/session" target="_blank" rel="external">https://github.com/session</a> 这个url的. 再仔细查看的话(截图没有显示), 会发现用户名或邮箱这个input标签的name属性为login, 而password标签的name属性为password. 看起来该有的都有的, 只要构造对应的请求数据向这个url发起请求应该就行了, 先试试看.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">url = <span class="string">"https://github.com/session"</span></div><div class="line">data = &#123;</div><div class="line">    <span class="string">"login"</span>: <span class="string">"peakhell"</span>,</div><div class="line">    <span class="string">"peakhell"</span>: <span class="string">"password"</span></div><div class="line">&#125;</div><div class="line">response = requests.post(url, data=data)</div><div class="line">print(response.content)</div></pre></td></tr></table></figure>
+<p>​    但是输出却是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">b&apos;Cookies must be enabled to use GitHub.&apos;</div></pre></td></tr></table></figure>
+<p>​    看来是github为了自己站点的安全, 用了一个session ID来记录你登录的过程. 那问题也不难解决, 只要设置一个session就好了. 改一下代码再试一次</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> requests</div><div class="line"></div><div class="line">url = <span class="string">"https://github.com/session"</span></div><div class="line">session = requests.session()</div><div class="line">session.get(<span class="string">"https://github.com/login"</span>)</div><div class="line">data = &#123;</div><div class="line">    <span class="string">"login"</span>: <span class="string">"peakhell"</span>,</div><div class="line">    <span class="string">"peakhell"</span>: <span class="string">"sheng709"</span></div><div class="line">&#125;</div><div class="line">response = session.post(url, data=data)</div><div class="line">print(response.content.decode(<span class="string">"utf-8"</span>))</div></pre></td></tr></table></figure>
+<p>​    好了, 页面是返回了, 但是返回的html代码却出奇的短, 这不太合理, 于是把返回的数据存成一个html文件再打开, 结果是这样的. </p>
+<p><img src="/peakhell-web/2017/10/18/爬虫登录站点那点事/unexceped.png" alt="unexpected">    </p>
+<p>​    ummm, 还是不对, 很有可能是请求的数据不符合要求, 亦或者是请求头部不符合要求. 没关系, 祭出大杀器, chrome开发者工具中的network仔细查看一下请求过程都发生了什么. </p>
+<p><img src="/peakhell-web/2017/10/18/爬虫登录站点那点事/inspect.png" alt="inspect">    </p>
+<p>​    注意红框部分, 果然是请求的数据格式不对, 但是其中的authenticity_token这一属性是啥东西, 想一想还是很容易知道的,这不就是为了防止请求跨域伪造而携带的一个token. 这东西怎么获取呢, 如果你之前写过flask程序的话应该非常清楚, 这东西会在隐藏的input标签中, 可以通过审核元素找到, 那就好办了. 再把header头部也依照network中的照猫画虎修改一下. 现在在试试.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> requests</div><div class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</div><div class="line"></div><div class="line">url = <span class="string">"https://github.com/session"</span></div><div class="line">session = requests.session()</div><div class="line">res = session.get(<span class="string">"https://github.com/login"</span>).content.decode(<span class="string">"utf-8"</span>)</div><div class="line">bsObj = BeautifulSoup(res)</div><div class="line">authenticity_token = bsObj.find(<span class="string">"input"</span>, &#123;<span class="string">"name"</span>: <span class="string">"authenticity_token"</span>&#125;).attrs[<span class="string">"value"</span>]</div><div class="line">print(authenticity_token)</div><div class="line">headers = &#123;</div><div class="line">    <span class="string">"Content-Type"</span>: <span class="string">"application/x-www-form-urlencoded"</span>,</div><div class="line">    <span class="string">"Origin"</span>: <span class="string">"https://github.com"</span>,</div><div class="line">    <span class="string">"Referer"</span>: <span class="string">"https://github.com/"</span>,</div><div class="line">    <span class="string">"User-Agent"</span>: <span class="string">"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.91 Safari/537.36"</span></div><div class="line">&#125;</div><div class="line">data = &#123;</div><div class="line">    <span class="string">"commit"</span>: <span class="string">"Sign in"</span>,</div><div class="line">    <span class="string">"utf8"</span>: <span class="string">"✓"</span>,</div><div class="line">    <span class="string">"authenticity_token"</span>: authenticity_token,</div><div class="line">    <span class="string">"login"</span>: <span class="string">"peakhell"</span>,</div><div class="line">    <span class="string">"password"</span>: <span class="string">"sheng709"</span></div><div class="line">&#125;</div><div class="line">response = session.post(url, data=data)</div><div class="line">print(response.content.decode(<span class="string">"utf-8"</span>))</div></pre></td></tr></table></figure>
+<p>​    嗯, 现在就可以了, 一点毛病都没有. 当然为了方便我们下次登录, 我们最好保存一下cookies, 下次利用cookies登录就方便的多了. 现在这个github的模拟登录已经有点长了, 现在把cookies的功能加上去, 并写成一个类.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> requests</div><div class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</div><div class="line"><span class="keyword">import</span> http.cookiejar <span class="keyword">as</span> cookiejar</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">GithubLogin</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        self.login_url = <span class="string">"https://github.com/login"</span></div><div class="line">        self.post_url = <span class="string">"https://github.com/session"</span></div><div class="line">        self.target_url = <span class="string">"https://github.com/settings/profile"</span></div><div class="line">        self.headers = &#123;</div><div class="line">            <span class="string">"Content-Type"</span>: <span class="string">"application/x-www-form-urlencoded"</span>,</div><div class="line">            <span class="string">"Origin"</span>: <span class="string">"https://github.com"</span>,</div><div class="line">            <span class="string">"Referer"</span>: <span class="string">"https://github.com/"</span>,</div><div class="line">            <span class="string">"User-Agent"</span>: <span class="string">"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.91 Safari/537.36"</span></div><div class="line">        &#125;</div><div class="line">        self.session = requests.session()</div><div class="line">        self.session.cookies = cookiejar.LWPCookieJar(filename=<span class="string">"github_cookie"</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_authenticity_token</span><span class="params">(self)</span>:</span></div><div class="line">        res = self.session.get(self.login_url)</div><div class="line">        bsObj = BeautifulSoup(res.content.decode(<span class="string">"utf-8"</span>))</div><div class="line">        authenticity_token = bsObj.find(<span class="string">"input"</span>, &#123;<span class="string">"name"</span>: <span class="string">"authenticity_token"</span>&#125;).attrs[<span class="string">"value"</span>]</div><div class="line">        <span class="keyword">return</span> authenticity_token</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">load_cookie</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            self.session.cookies.load(ignore_discard=<span class="keyword">True</span>)</div><div class="line">            <span class="keyword">return</span> <span class="keyword">True</span></div><div class="line">        <span class="keyword">except</span>:</div><div class="line">            print(<span class="string">"没有对应的cookies文件, 导入失败"</span>)</div><div class="line">            <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">bool_login</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="keyword">if</span> self.load_cookie():</div><div class="line">            res = self.session.get(self.target_url)</div><div class="line">            <span class="keyword">if</span> res.status_code == requests.codes.ok:</div><div class="line">                print(<span class="string">"已经登录"</span>)</div><div class="line">                <span class="keyword">return</span> <span class="keyword">True</span></div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                print(<span class="string">"cookies已经失效, 请重新登录"</span>)</div><div class="line">                <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">(self, username, password)</span>:</span></div><div class="line">        authenticity_token = self.get_authenticity_token()</div><div class="line">        post_data = &#123;</div><div class="line">            <span class="string">'commit'</span>: <span class="string">'Sign in'</span>,</div><div class="line">            <span class="string">'utf8'</span>: <span class="string">'✓'</span>,</div><div class="line">            <span class="string">'authenticity_token'</span>: authenticity_token,</div><div class="line">            <span class="string">'login'</span>: username,</div><div class="line">            <span class="string">'password'</span>: password</div><div class="line">        &#125;</div><div class="line">        res = self.session.post(self.post_url, data=post_data, headers=self.headers)</div><div class="line">        self.session.cookies.save()</div><div class="line">        <span class="keyword">return</span> res</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    github = GithubLogin()</div><div class="line">    <span class="keyword">if</span> github.bool_login():</div><div class="line">        <span class="keyword">pass</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        github.login(<span class="string">"username"</span>,<span class="string">"password"</span>)</div></pre></td></tr></table></figure>
+<p>​    非常容易读懂的一个类, 有了cookies,下次登录就可以直接载入cookies进行访问了, 这样省事很多.</p>
+<p>​    回顾一下上面的例子, 最简单的认证登录就是找到表单的提交url, 然后利用python构造出对应的username和password字典, 用这个数据去请求就行了. 然而事实上并不是那么简单, 大多数站点为了提高自己网站的安全性,都会采取一些措施, 例如github采用的authenticity_token的方式. 甚至有一些站点必须使用特定的headers才能真正获取数据, 对付这一类的方法也很简单, 就是查看chrome的登录请求, 把headers 和post_data都按照规范的来, 多多思考, 一般都可以解决.</p>
+<p>​    补充一点, headers头部一般只需要注意以下几个属性, Host, Origin,Referer,User-Agent, 尤其是User-Agent属性, 至于这些属性的含义是什么, 那就不是本篇博客的讨论范围的, 有兴趣的自己可以仔细查阅网上的资料.</p>
+<p><strong>烦人的验证码</strong></p>
+<p>​    过两天补上</p>
+<p>​    </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;​    最近在学习使用Python进行网络数据采集, 研究了一下站点登录的模拟, 发现还是有很多有趣的东西的, 所以做个笔记, 跟有缘人分享一下(如果你能看到这篇文章的话).&lt;/p&gt;
+&lt;p&gt;​    &lt;strong&gt;从登录github说起&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;
+    
+    </summary>
+    
+    
+      <category term="爬虫, 模拟登录" scheme="https://peakhell.github.io/peakhell-web/tags/%E7%88%AC%E8%99%AB-%E6%A8%A1%E6%8B%9F%E7%99%BB%E5%BD%95/"/>
+    
+  </entry>
   
   <entry>
     <title>python爬虫1</title>
@@ -583,51 +630,6 @@
     
     
       <category term="故事" scheme="https://peakhell.github.io/peakhell-web/tags/%E6%95%85%E4%BA%8B/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>git常用操作2</title>
-    <link href="https://peakhell.github.io/peakhell-web/2017/05/09/git%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C2/"/>
-    <id>https://peakhell.github.io/peakhell-web/2017/05/09/git常用操作2/</id>
-    <published>2017-05-09T07:19:46.000Z</published>
-    <updated>2017-05-18T07:43:56.507Z</updated>
-    
-    <content type="html"><![CDATA[<p>​    第一节主要介绍了git操作中常用到的添加,提交,版本切换,以及添加错误信息之后的撤销操作.这些操作都是在同一分支上的,这一节介绍一下git中一个非常重要的功能–分支.</p>
-<ol>
-<li><p>什么是分支</p>
-<p>设想你正在开发一个程序, 老板要你开发一个新的功能,几个小时后,你开发完成.并提交上git.这时你收到老板的消息,经费不足,新功能取消,虽然操蛋,但是你还是得照办,于是你把版本回退到上一个.等等,这时候新功能我还想留着自己玩怎么办.git提供了分支来实现这个功能. 当开发一个项目新功能时, 我们可以开一个分支, 在分支上开发,这样就不会影响主分支,等确认开发完毕我们在和主分支进行合并.这样就很保险了.</p>
-</li>
-<li><p>创建新分支</p>
-<p>在git中创建新分支十分简单, 新建一个分支:</p>
-<p>​    <code>git branch dev</code>  </p>
-<p>新建并切换到建立的分支:</p>
-<p>​    <code>git checkout -b dev</code></p>
-<p>相当于下面两个命令:</p>
-<p>​    <code>gitbranch dev</code></p>
-<p>​    <code>git chekcout dev</code></p>
-<p>还有一个非常常用的命令是查看分支状态:</p>
-<p>​    <code>git branch</code></p>
-<p>这个命令将会列出所有的分支并指出当前处于哪个分支.</p>
-<p>​</p>
-<p>​</p>
-</li>
-</ol>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;​    第一节主要介绍了git操作中常用到的添加,提交,版本切换,以及添加错误信息之后的撤销操作.这些操作都是在同一分支上的,这一节介绍一下git中一个非常重要的功能–分支.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;什么是分支&lt;/p&gt;
-&lt;p&gt;设想你正在开发一个程序, 老板要你开发
-    
-    </summary>
-    
-      <category term="编程" scheme="https://peakhell.github.io/peakhell-web/categories/%E7%BC%96%E7%A8%8B/"/>
-    
-    
-      <category term="git" scheme="https://peakhell.github.io/peakhell-web/tags/git/"/>
     
   </entry>
   
