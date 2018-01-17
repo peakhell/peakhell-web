@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>关于自动化传输任务的总结 | Peakhell的个人网站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="​    前段时间一直在做这个定时传输PDF文件的工作, 具体的工作流程也不是很复杂. 首先在根据一些条件从mongoDB的数据库中取出PDF文件, 然后进行打包压缩, 最后再通过sftp协议把文件发出去. 说来简单, 实则还是有一些难点的. 首先数据库其实有两个, 一个oracle 数据库, 一个mongoDB数据库, 首先要从oracle 数据库中query出mongoDB 的ID, 由于or">
+<meta name="keywords" content="python linux定时任务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于自动化传输任务的总结">
+<meta property="og:url" content="https://peakhell.github.io/peakhell-web/2018/01/16/关于自动化传输任务的总结/index.html">
+<meta property="og:site_name" content="Peakhell的个人网站">
+<meta property="og:description" content="​    前段时间一直在做这个定时传输PDF文件的工作, 具体的工作流程也不是很复杂. 首先在根据一些条件从mongoDB的数据库中取出PDF文件, 然后进行打包压缩, 最后再通过sftp协议把文件发出去. 说来简单, 实则还是有一些难点的. 首先数据库其实有两个, 一个oracle 数据库, 一个mongoDB数据库, 首先要从oracle 数据库中query出mongoDB 的ID, 由于or">
+<meta property="og:updated_time" content="2018-01-17T07:09:07.435Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于自动化传输任务的总结">
+<meta name="twitter:description" content="​    前段时间一直在做这个定时传输PDF文件的工作, 具体的工作流程也不是很复杂. 首先在根据一些条件从mongoDB的数据库中取出PDF文件, 然后进行打包压缩, 最后再通过sftp协议把文件发出去. 说来简单, 实则还是有一些难点的. 首先数据库其实有两个, 一个oracle 数据库, 一个mongoDB数据库, 首先要从oracle 数据库中query出mongoDB 的ID, 由于or">
+  
+    <link rel="alternate" href="/atom.xml" title="Peakhell的个人网站" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/peakhell-web/fancybox/favicon.ico">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/peakhell-web/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/peakhell-web/" id="logo">Peakhell的个人网站</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/peakhell-web/" id="subtitle">编程,围棋,故事</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/peakhell-web/">Home</a>
+        
+          <a class="main-nav-link" href="/peakhell-web/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://peakhell.github.io/peakhell-web"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-关于自动化传输任务的总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/peakhell-web/2018/01/16/关于自动化传输任务的总结/" class="article-date">
+  <time datetime="2018-01-16T08:01:23.000Z" itemprop="datePublished">2018-01-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      关于自动化传输任务的总结
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>​    前段时间一直在做这个定时传输PDF文件的工作, 具体的工作流程也不是很复杂. 首先在根据一些条件从mongoDB的数据库中取出PDF文件, 然后进行打包压缩, 最后再通过sftp协议把文件发出去. 说来简单, 实则还是有一些难点的. 首先数据库其实有两个, 一个oracle 数据库, 一个mongoDB数据库, 首先要从oracle 数据库中query出mongoDB 的ID, 由于oracle数据库表众多, 关系复杂, 筛选规则也颇为麻烦, 这一步还是花费了不少时间. 其次是公司为了数据的安全, mongoDB数据库只能通过linux 服务器上的内网访问, 这就是有很大一部分编程工作我是无法借助ide工具的, 只能使用vim, 既没有自动补全也没有语法检测, 写起来还是挺麻烦的. 第三是自动化任务的权限问题, 运行这个程序的是一个普通的账号, 而在Linux中, 普通账号要运行自动化程序要修改多个地方的权限, 不知道此时的我还是走了不少弯路. 至于异常情况处理那些,主要与公司业务有关, 就不多讨论了. 闲话不多说了, 开始正文.</p>
+<ol>
+<li>python 连接oracle</li>
+</ol>
+<p>linux下在python使用oracle数据库, 还是要做一些准备工作的. 大致分为3步. </p>
+<ul>
+<li><p>首先是到oracle的官网(<a href="http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html?ssSourceSiteId=otncn)下载对应的客户端和依赖" target="_blank" rel="external">http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html?ssSourceSiteId=otncn)下载对应的客户端和依赖</a>, 现在最新的版本是12.2.0.1.0. 要下载的是 <a href="http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html?ssSourceSiteId=otncn" target="_blank" rel="external">oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm</a> 和<a href="http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html?ssSourceSiteId=otncn" target="_blank" rel="external">oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm</a>, 或者对应的zip版本, 如果是rpm就直接用rpm直接安装, 如果是zip则先解压缩, 在安装.</p>
+</li>
+<li><p>添加环境变量, 如无意外的话, oracle客户端会被安装在这个目录/usr/lib/oracle, 这时需要把这个添加到环境变量中, 好让其他程序可以调用. 注意安装的版本, 还有下面导入环境变量的方法是暂时性的, 只在当前shell起作用, 如果想永久添加, 可以修改对应的配置文件, 具体方法可以上网查.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=/usr/lib/oracle/12.2/client64/lib:<span class="variable">$LD_LIBRARY_PATH</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>使用pip安装对用的oracle库.</p>
+</li>
+</ul>
+<p>本项目中我用的是cx_Oracle这个包,  API还是挺简洁易懂的, 用起来也很顺手, 首先连接数据库, 然后创建cursor, 用cursor来执行SQL语句.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 连接数据库</span></div><div class="line">db = cx_Oracle.connect(username, password, IP)</div><div class="line"><span class="comment"># 执行语句</span></div><div class="line">cursor = db.cursor()</div><div class="line">data = cursor.execute(</div><div class="line">                    <span class="string">"SELECT BAR_CODE FROM PLATFORM WHERE PARENTNODENO='' OR NODENO=''"</span>)</div><div class="line"><span class="comment"># 关闭连接</span></div><div class="line">db.close()</div></pre></td></tr></table></figure>
+<p>当然, cx_Oracle这个包还提供了很多功能, 这里就不详细讨论了, 网上有很多教程, 在这个项目我用到的只有这些了.写的时候最好把数据库的相关操作写成一个类, 这样结构比较清晰, 维护起来也方便.</p>
+<ol>
+<li>python 连接 mongoDB</li>
+</ol>
+<p>与oracle 数据库不同, mongoDB是NoSQL数据库类型的一种, 是一种基于分布式文件存储的数据库.  要使用mongoDB , 首先要到mongoDB的官网下载相应的客户端, 然后安装, 无论什么系统, 由于我使用的是Linux系统, 这里就只讲linux怎么安装. </p>
+<p>首先到mongoDB的官网下载对应的客户端(<a href="https://www.mongodb.com/download-center?jmp=nav" target="_blank" rel="external">https://www.mongodb.com/download-center?jmp=nav</a>), 安装即可. 我记得是没有任何坑的, 不过要下载貌似要注册一个账号. 安装完之后可以在命令行打mongo,如过成功安装的话这时应该已经进入mongoDB数据库了.  关于mongoDB数据库还有非常多的知识值得一聊, 只是本文是简单的总结,这里就不涉及了. 可以查看菜鸟上的教程.</p>
+<p>python使用mongoDB的一些常用操作也不难. 主要还是那几个操作, 连接, 筛选, 读取等等. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 导入相应的包</span></div><div class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</div><div class="line"><span class="comment"># 连接数据库</span></div><div class="line">client = MongoClient(host, port)</div><div class="line"><span class="comment"># 连接特定的集合</span></div><div class="line">db = client[dbname]</div><div class="line"><span class="comment"># 插入数据</span></div><div class="line">db.posts.insert_one(data)</div><div class="line"><span class="comment"># 查看数据</span></div><div class="line">db.posts.find_one()</div><div class="line"><span class="comment"># 删除数据</span></div><div class="line">db.posts.delete_one()</div></pre></td></tr></table></figure>
+<p>以上就是一些常用的操作, 在本项目中还有一个比较特殊的, 我要去除mongoDB存储的PDF文件, 这稍微有点不同. mongoDB使用GridFS 用于存储和恢复那些超过16M（BSON文件限制）的文件(如：图片、音频、视频等)。GridFS 会将大文件对象分割成多个小的chunk(文件片段),一般为256k/个,每个chunk将作为MongoDB的一个文档(document)被存储在chunks集合中。GridFS 用两个集合来存储一个文件：fs.files与fs.chunks。因此要取出PDF文件要用到gridfs</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> gridfs <span class="keyword">import</span> *</div><div class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</div><div class="line"><span class="keyword">from</span> bson.objectid <span class="keyword">import</span> ObjectId</div><div class="line">fs = GridFS(db, <span class="string">"fs"</span>)</div><div class="line"><span class="comment"># id是存储的时候生成的唯一id值</span></div><div class="line">f = fs.get(ObjectId(str(id)))</div><div class="line"><span class="comment"># data二进制的pdf文件, 再保存即可</span></div><div class="line">data = f.read()</div><div class="line"><span class="keyword">with</span> open(<span class="string">"test.pdf"</span>, <span class="string">"wb"</span>) <span class="keyword">as</span> f:</div><div class="line">f.write(data)</div></pre></td></tr></table></figure>
+<ol>
+<li>自动化任务</li>
+</ol>
+<p>自动化任务还是有一些值得一提, 随手一百度你就会发现crontab这个Linux的工具就是用来构建自动化任务的, 并且用法也并不难. </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 编辑自动化任务</span></div><div class="line">crontab <span class="_">-e</span>  </div><div class="line"><span class="comment"># 查看自动化任务列表</span></div><div class="line">crontab <span class="_">-l</span></div><div class="line"><span class="comment"># 删除自动化任务, 若不指定则删除当前用户的所有任务</span></div><div class="line">crontab -r</div></pre></td></tr></table></figure>
+<p>自动化任务的格式也不复杂.如下所示</p>
+<p>分 时 日 月 星期 要运行的命令</p>
+<ul>
+<li>第1列分钟0～59</li>
+<li>第2列小时0～23（0表示子夜）</li>
+<li>第3列日1～31</li>
+<li>第4列月1～12</li>
+<li>第5列星期0～7（0和7表示星期天）</li>
+<li>第6列要运行的命令</li>
+</ul>
+<p>举几个例子就好懂了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> 每分钟执行一次</span></div><div class="line">* * * * * myCommand</div><div class="line"><span class="meta">#</span><span class="bash"> 每天晚上10点执行</span></div><div class="line">0 22 * * * myCommand</div><div class="line"><span class="meta">#</span><span class="bash"> 每周六晚上11点重启smb服务</span></div><div class="line">0 23 * * 6 /etc/init.d/smb restart</div><div class="line"><span class="meta">#</span><span class="bash"> 每月1、10、22日的4 : 45重启smb</span></div><div class="line">45 4 1,10,22 * * /etc/init.d/smb restart</div></pre></td></tr></table></figure>
+<p>大致是这样, 自己体会一下很好懂. 接下来说点实用的. 怎么判断这条命令执行了没有呢? 实际上crontab 的自动化任务是会有log文档, 我们在对应的时间点查看这个文档有没有这条记录就行了. </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tail /var/<span class="built_in">log</span>/cron</div></pre></td></tr></table></figure>
+<p>万一没有生效呢, 我们怎么知道哪里错误, 可以这样, 用重定向命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">45 4 1,10,22 * * /etc/init.d/smb restart &amp;&gt; msg.txt</div></pre></td></tr></table></figure>
+<p>这样万一发生错误我们就可以查看msg.txt文件来查看是哪里出了问题. </p>
+<p>还有就是权限问题, 如果你有管理员权限那就不用考虑, 当你没有使用的账户并没有管理员权限的时候, 需要修改一下cron程序的权限, 不然是不会执行的.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">which cron</div><div class="line"><span class="meta">#</span><span class="bash"> 一般是这个目录/usr/sbin/cron</span></div><div class="line">ll /usr/sbin/cron</div><div class="line"><span class="meta">#</span><span class="bash"> 结果大概是这样-rwxr-xr-x 1 root root 44472 4月   6  2016 cron*</span></div><div class="line"><span class="meta">#</span><span class="bash"> 如果最后一位没有x权限, 那就要改一下</span></div><div class="line"><span class="meta">#</span><span class="bash"> 还有一个地方的权限要改</span></div><div class="line">which crontab</div><div class="line"><span class="meta">#</span><span class="bash">/usr/bin/crontab</span></div><div class="line">ll /usr/bin/crontab</div><div class="line"><span class="meta">#</span><span class="bash">-rwxr-sr-x 1 root crontab 36080 4月   6  2016 /usr/bin/crontab*</span></div><div class="line"><span class="meta">#</span><span class="bash"> 注意看上面的中间部分, 有一个字母为s, 我们知道文件的权限一般为r, w, x. 这个s是什么鬼, 其实是Set GID，简称为SGID的特殊权限.这个解释起来听麻烦的, 大家看看鸟哥的linux私房菜, 讲的非常清楚.简而言之, 要是普通用户可以执行自动化任务, 就要是最后三位的权限符合要求.一般有x权限即可.</span></div></pre></td></tr></table></figure>
+<p>还有就是目录的问题, 如果你在你在python程序中使用了os模块来指定路径, 那有一点还是要注意一下的. 加入你的项目在/home/hsgao/PDF_transfer, 然后你在入口程序中有这么几行代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> os</div><div class="line">base_dir = os.path.abspath(<span class="string">""</span>)</div></pre></td></tr></table></figure>
+<p>你觉得base_dir的路径应该是什么呢, 是/home/hsgao/PDF_transfer吗? 并不是, 而是/home/hsgao, 也就是当前用户的home目录, 这点要注意了.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://peakhell.github.io/peakhell-web/2018/01/16/关于自动化传输任务的总结/" data-id="cjciq8xlr0005egcmztcv6hxj" class="article-share-link">Share</a>
+      
+        <a href="https://peakhell.github.io/peakhell-web/2018/01/16/关于自动化传输任务的总结/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/peakhell-web/tags/python-linux定时任务/">python linux定时任务</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/peakhell-web/2017/10/18/爬虫登录站点那点事/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">爬虫登录站点那点事</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/peakhell-web/categories/杂想/">杂想</a></li><li class="category-list-item"><a class="category-list-link" href="/peakhell-web/categories/编程/">编程</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/flask-python/">flask python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/python-linux定时任务/">python linux定时任务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/python-virtualenv/">python virtualenv</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/故事/">故事</a></li><li class="tag-list-item"><a class="tag-list-link" href="/peakhell-web/tags/爬虫-模拟登录/">爬虫, 模拟登录</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/peakhell-web/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/peakhell-web/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/peakhell-web/tags/flask-python/" style="font-size: 10px;">flask python</a> <a href="/peakhell-web/tags/git/" style="font-size: 20px;">git</a> <a href="/peakhell-web/tags/jQuery/" style="font-size: 20px;">jQuery</a> <a href="/peakhell-web/tags/python-linux定时任务/" style="font-size: 10px;">python linux定时任务</a> <a href="/peakhell-web/tags/python-virtualenv/" style="font-size: 10px;">python virtualenv</a> <a href="/peakhell-web/tags/故事/" style="font-size: 10px;">故事</a> <a href="/peakhell-web/tags/爬虫-模拟登录/" style="font-size: 10px;">爬虫, 模拟登录</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/07/">July 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/06/">June 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/peakhell-web/archives/2017/05/">May 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/peakhell-web/2018/01/16/关于自动化传输任务的总结/">关于自动化传输任务的总结</a>
+          </li>
+        
+          <li>
+            <a href="/peakhell-web/2017/10/18/爬虫登录站点那点事/">爬虫登录站点那点事</a>
+          </li>
+        
+          <li>
+            <a href="/peakhell-web/2017/09/01/读书笔记之JavaScript语言精粹/">读书笔记之JavaScript语言精粹</a>
+          </li>
+        
+          <li>
+            <a href="/peakhell-web/2017/07/05/MySQL用户管理/">MySQL用户管理</a>
+          </li>
+        
+          <li>
+            <a href="/peakhell-web/2017/06/29/jQuery笔记2/">jQuery笔记(2) - 常见的DOM操作</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner" style="text-align:center;">
+      <table width="100%" border="0">
+        <tr>
+          <td style="text-align:left">
+            Copyright &copy; 2014-2018 peakhell &nbsp; &nbsp;
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a><br>
+          </td>
+          <td style="text-align:right">
+            <div style="font-family: FontAwesome;font-size: 20px;">
+              <a href="http://weibo.com/3904642734" title="微博" target="_blank">&#61834;</a>&nbsp;
+              <a href="http://zhihu.com" title="QQ空间" target="_blank">&#61910;</a>&nbsp;
+              <a href="https://github.com/peakhell" title="GitHub" target="_blank">&#61595;</a>&nbsp;
+              <a href="https://plus.google.com/118157846818083514683" title="Google+" target="_blank">&#61653;</a>
+            </div><br>
+            <a href="/sitemap.xml">网站地图</a>&nbsp; &nbsp;
+            <a href="/atom.xml">订阅本站</a>&nbsp; &nbsp;
+            <a href="mailto:hsgaomail.gmail.com" target="_blank">联系博主</a>&nbsp; &nbsp;
+            ICP 备案呵呵
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/peakhell-web/" class="mobile-nav-link">Home</a>
+  
+    <a href="/peakhell-web/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'https-peakhell-github-io-peakhell-web';
+  
+  var disqus_url = 'https://peakhell.github.io/peakhell-web/2018/01/16/关于自动化传输任务的总结/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/peakhell-web/fancybox/jquery.fancybox.css">
+  <script src="/peakhell-web/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/peakhell-web/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -5,7 +5,7 @@
   <link href="/peakhell-web/atom.xml" rel="self"/>
   
   <link href="https://peakhell.github.io/peakhell-web/"/>
-  <updated>2017-10-19T06:48:04.382Z</updated>
+  <updated>2018-01-17T07:09:07.435Z</updated>
   <id>https://peakhell.github.io/peakhell-web/</id>
   
   <author>
@@ -14,6 +14,79 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>关于自动化传输任务的总结</title>
+    <link href="https://peakhell.github.io/peakhell-web/2018/01/16/%E5%85%B3%E4%BA%8E%E8%87%AA%E5%8A%A8%E5%8C%96%E4%BC%A0%E8%BE%93%E4%BB%BB%E5%8A%A1%E7%9A%84%E6%80%BB%E7%BB%93/"/>
+    <id>https://peakhell.github.io/peakhell-web/2018/01/16/关于自动化传输任务的总结/</id>
+    <published>2018-01-16T08:01:23.000Z</published>
+    <updated>2018-01-17T07:09:07.435Z</updated>
+    
+    <content type="html"><![CDATA[<p>​    前段时间一直在做这个定时传输PDF文件的工作, 具体的工作流程也不是很复杂. 首先在根据一些条件从mongoDB的数据库中取出PDF文件, 然后进行打包压缩, 最后再通过sftp协议把文件发出去. 说来简单, 实则还是有一些难点的. 首先数据库其实有两个, 一个oracle 数据库, 一个mongoDB数据库, 首先要从oracle 数据库中query出mongoDB 的ID, 由于oracle数据库表众多, 关系复杂, 筛选规则也颇为麻烦, 这一步还是花费了不少时间. 其次是公司为了数据的安全, mongoDB数据库只能通过linux 服务器上的内网访问, 这就是有很大一部分编程工作我是无法借助ide工具的, 只能使用vim, 既没有自动补全也没有语法检测, 写起来还是挺麻烦的. 第三是自动化任务的权限问题, 运行这个程序的是一个普通的账号, 而在Linux中, 普通账号要运行自动化程序要修改多个地方的权限, 不知道此时的我还是走了不少弯路. 至于异常情况处理那些,主要与公司业务有关, 就不多讨论了. 闲话不多说了, 开始正文.</p>
+<ol>
+<li>python 连接oracle</li>
+</ol>
+<p>linux下在python使用oracle数据库, 还是要做一些准备工作的. 大致分为3步. </p>
+<ul>
+<li><p>首先是到oracle的官网(<a href="http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html?ssSourceSiteId=otncn)下载对应的客户端和依赖" target="_blank" rel="external">http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html?ssSourceSiteId=otncn)下载对应的客户端和依赖</a>, 现在最新的版本是12.2.0.1.0. 要下载的是 <a href="http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html?ssSourceSiteId=otncn" target="_blank" rel="external">oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm</a> 和<a href="http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html?ssSourceSiteId=otncn" target="_blank" rel="external">oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm</a>, 或者对应的zip版本, 如果是rpm就直接用rpm直接安装, 如果是zip则先解压缩, 在安装.</p>
+</li>
+<li><p>添加环境变量, 如无意外的话, oracle客户端会被安装在这个目录/usr/lib/oracle, 这时需要把这个添加到环境变量中, 好让其他程序可以调用. 注意安装的版本, 还有下面导入环境变量的方法是暂时性的, 只在当前shell起作用, 如果想永久添加, 可以修改对应的配置文件, 具体方法可以上网查.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=/usr/lib/oracle/12.2/client64/lib:<span class="variable">$LD_LIBRARY_PATH</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>使用pip安装对用的oracle库.</p>
+</li>
+</ul>
+<p>本项目中我用的是cx_Oracle这个包,  API还是挺简洁易懂的, 用起来也很顺手, 首先连接数据库, 然后创建cursor, 用cursor来执行SQL语句.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 连接数据库</span></div><div class="line">db = cx_Oracle.connect(username, password, IP)</div><div class="line"><span class="comment"># 执行语句</span></div><div class="line">cursor = db.cursor()</div><div class="line">data = cursor.execute(</div><div class="line">                    <span class="string">"SELECT BAR_CODE FROM PLATFORM WHERE PARENTNODENO='' OR NODENO=''"</span>)</div><div class="line"><span class="comment"># 关闭连接</span></div><div class="line">db.close()</div></pre></td></tr></table></figure>
+<p>当然, cx_Oracle这个包还提供了很多功能, 这里就不详细讨论了, 网上有很多教程, 在这个项目我用到的只有这些了.写的时候最好把数据库的相关操作写成一个类, 这样结构比较清晰, 维护起来也方便.</p>
+<ol>
+<li>python 连接 mongoDB</li>
+</ol>
+<p>与oracle 数据库不同, mongoDB是NoSQL数据库类型的一种, 是一种基于分布式文件存储的数据库.  要使用mongoDB , 首先要到mongoDB的官网下载相应的客户端, 然后安装, 无论什么系统, 由于我使用的是Linux系统, 这里就只讲linux怎么安装. </p>
+<p>首先到mongoDB的官网下载对应的客户端(<a href="https://www.mongodb.com/download-center?jmp=nav" target="_blank" rel="external">https://www.mongodb.com/download-center?jmp=nav</a>), 安装即可. 我记得是没有任何坑的, 不过要下载貌似要注册一个账号. 安装完之后可以在命令行打mongo,如过成功安装的话这时应该已经进入mongoDB数据库了.  关于mongoDB数据库还有非常多的知识值得一聊, 只是本文是简单的总结,这里就不涉及了. 可以查看菜鸟上的教程.</p>
+<p>python使用mongoDB的一些常用操作也不难. 主要还是那几个操作, 连接, 筛选, 读取等等. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 导入相应的包</span></div><div class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</div><div class="line"><span class="comment"># 连接数据库</span></div><div class="line">client = MongoClient(host, port)</div><div class="line"><span class="comment"># 连接特定的集合</span></div><div class="line">db = client[dbname]</div><div class="line"><span class="comment"># 插入数据</span></div><div class="line">db.posts.insert_one(data)</div><div class="line"><span class="comment"># 查看数据</span></div><div class="line">db.posts.find_one()</div><div class="line"><span class="comment"># 删除数据</span></div><div class="line">db.posts.delete_one()</div></pre></td></tr></table></figure>
+<p>以上就是一些常用的操作, 在本项目中还有一个比较特殊的, 我要去除mongoDB存储的PDF文件, 这稍微有点不同. mongoDB使用GridFS 用于存储和恢复那些超过16M（BSON文件限制）的文件(如：图片、音频、视频等)。GridFS 会将大文件对象分割成多个小的chunk(文件片段),一般为256k/个,每个chunk将作为MongoDB的一个文档(document)被存储在chunks集合中。GridFS 用两个集合来存储一个文件：fs.files与fs.chunks。因此要取出PDF文件要用到gridfs</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> gridfs <span class="keyword">import</span> *</div><div class="line"><span class="keyword">from</span> pymongo <span class="keyword">import</span> MongoClient</div><div class="line"><span class="keyword">from</span> bson.objectid <span class="keyword">import</span> ObjectId</div><div class="line">fs = GridFS(db, <span class="string">"fs"</span>)</div><div class="line"><span class="comment"># id是存储的时候生成的唯一id值</span></div><div class="line">f = fs.get(ObjectId(str(id)))</div><div class="line"><span class="comment"># data二进制的pdf文件, 再保存即可</span></div><div class="line">data = f.read()</div><div class="line"><span class="keyword">with</span> open(<span class="string">"test.pdf"</span>, <span class="string">"wb"</span>) <span class="keyword">as</span> f:</div><div class="line">f.write(data)</div></pre></td></tr></table></figure>
+<ol>
+<li>自动化任务</li>
+</ol>
+<p>自动化任务还是有一些值得一提, 随手一百度你就会发现crontab这个Linux的工具就是用来构建自动化任务的, 并且用法也并不难. </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 编辑自动化任务</span></div><div class="line">crontab <span class="_">-e</span>  </div><div class="line"><span class="comment"># 查看自动化任务列表</span></div><div class="line">crontab <span class="_">-l</span></div><div class="line"><span class="comment"># 删除自动化任务, 若不指定则删除当前用户的所有任务</span></div><div class="line">crontab -r</div></pre></td></tr></table></figure>
+<p>自动化任务的格式也不复杂.如下所示</p>
+<p>分 时 日 月 星期 要运行的命令</p>
+<ul>
+<li>第1列分钟0～59</li>
+<li>第2列小时0～23（0表示子夜）</li>
+<li>第3列日1～31</li>
+<li>第4列月1～12</li>
+<li>第5列星期0～7（0和7表示星期天）</li>
+<li>第6列要运行的命令</li>
+</ul>
+<p>举几个例子就好懂了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> 每分钟执行一次</span></div><div class="line">* * * * * myCommand</div><div class="line"><span class="meta">#</span><span class="bash"> 每天晚上10点执行</span></div><div class="line">0 22 * * * myCommand</div><div class="line"><span class="meta">#</span><span class="bash"> 每周六晚上11点重启smb服务</span></div><div class="line">0 23 * * 6 /etc/init.d/smb restart</div><div class="line"><span class="meta">#</span><span class="bash"> 每月1、10、22日的4 : 45重启smb</span></div><div class="line">45 4 1,10,22 * * /etc/init.d/smb restart</div></pre></td></tr></table></figure>
+<p>大致是这样, 自己体会一下很好懂. 接下来说点实用的. 怎么判断这条命令执行了没有呢? 实际上crontab 的自动化任务是会有log文档, 我们在对应的时间点查看这个文档有没有这条记录就行了. </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tail /var/<span class="built_in">log</span>/cron</div></pre></td></tr></table></figure>
+<p>万一没有生效呢, 我们怎么知道哪里错误, 可以这样, 用重定向命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">45 4 1,10,22 * * /etc/init.d/smb restart &amp;&gt; msg.txt</div></pre></td></tr></table></figure>
+<p>这样万一发生错误我们就可以查看msg.txt文件来查看是哪里出了问题. </p>
+<p>还有就是权限问题, 如果你有管理员权限那就不用考虑, 当你没有使用的账户并没有管理员权限的时候, 需要修改一下cron程序的权限, 不然是不会执行的.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">which cron</div><div class="line"><span class="meta">#</span><span class="bash"> 一般是这个目录/usr/sbin/cron</span></div><div class="line">ll /usr/sbin/cron</div><div class="line"><span class="meta">#</span><span class="bash"> 结果大概是这样-rwxr-xr-x 1 root root 44472 4月   6  2016 cron*</span></div><div class="line"><span class="meta">#</span><span class="bash"> 如果最后一位没有x权限, 那就要改一下</span></div><div class="line"><span class="meta">#</span><span class="bash"> 还有一个地方的权限要改</span></div><div class="line">which crontab</div><div class="line"><span class="meta">#</span><span class="bash">/usr/bin/crontab</span></div><div class="line">ll /usr/bin/crontab</div><div class="line"><span class="meta">#</span><span class="bash">-rwxr-sr-x 1 root crontab 36080 4月   6  2016 /usr/bin/crontab*</span></div><div class="line"><span class="meta">#</span><span class="bash"> 注意看上面的中间部分, 有一个字母为s, 我们知道文件的权限一般为r, w, x. 这个s是什么鬼, 其实是Set GID，简称为SGID的特殊权限.这个解释起来听麻烦的, 大家看看鸟哥的linux私房菜, 讲的非常清楚.简而言之, 要是普通用户可以执行自动化任务, 就要是最后三位的权限符合要求.一般有x权限即可.</span></div></pre></td></tr></table></figure>
+<p>还有就是目录的问题, 如果你在你在python程序中使用了os模块来指定路径, 那有一点还是要注意一下的. 加入你的项目在/home/hsgao/PDF_transfer, 然后你在入口程序中有这么几行代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> os</div><div class="line">base_dir = os.path.abspath(<span class="string">""</span>)</div></pre></td></tr></table></figure>
+<p>你觉得base_dir的路径应该是什么呢, 是/home/hsgao/PDF_transfer吗? 并不是, 而是/home/hsgao, 也就是当前用户的home目录, 这点要注意了.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;​    前段时间一直在做这个定时传输PDF文件的工作, 具体的工作流程也不是很复杂. 首先在根据一些条件从mongoDB的数据库中取出PDF文件, 然后进行打包压缩, 最后再通过sftp协议把文件发出去. 说来简单, 实则还是有一些难点的. 首先数据库其实有两个, 一个o
+    
+    </summary>
+    
+    
+      <category term="python linux定时任务" scheme="https://peakhell.github.io/peakhell-web/tags/python-linux%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1/"/>
+    
+  </entry>
   
   <entry>
     <title>爬虫登录站点那点事</title>
@@ -63,32 +136,18 @@
   </entry>
   
   <entry>
-    <title>python爬虫1</title>
-    <link href="https://peakhell.github.io/peakhell-web/2017/10/13/python%E7%88%AC%E8%99%AB1/"/>
-    <id>https://peakhell.github.io/peakhell-web/2017/10/13/python爬虫1/</id>
-    <published>2017-10-13T03:29:10.000Z</published>
-    <updated>2017-10-13T03:29:10.059Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
     <title>读书笔记之JavaScript语言精粹</title>
     <link href="https://peakhell.github.io/peakhell-web/2017/09/01/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%B9%8BJavaScript%E8%AF%AD%E8%A8%80%E7%B2%BE%E7%B2%B9/"/>
     <id>https://peakhell.github.io/peakhell-web/2017/09/01/读书笔记之JavaScript语言精粹/</id>
     <published>2017-09-01T01:43:49.000Z</published>
-    <updated>2017-09-04T06:54:39.602Z</updated>
+    <updated>2017-11-29T02:27:35.436Z</updated>
     
     <content type="html"><![CDATA[<p>​       作为一个前端开发人员,  js的一些坑已经踩了不少, 但这本书总结的非常好, 把精华部分和糟粕部分都非常系统详细的列出来, 个人认为附录部分的js毒瘤与糟粕非常值得一读, 如果你是刚开始接触js, 那就更值得你好好看看了, 绝对能少踩很多坑. 这里做个读书笔记, 总结一下这本书的附录部分, 也就是js的坑.</p>
 <ul>
 <li><p>全局变量</p>
 <p>对全局变量的依赖可能是JavaScript最糟糕的特性. 很多编程语言也有全局变量, 例如Java使用public static 关键字定义全局变量, 但在JavaScript中, 由于没有连接器(linker), 所有的编译单元都在如到一个公共全局对象中(也就是window对象). 也许在小型程序中这会带来很多便利, 但当程序变得复杂时, 全局变量便会使程序变得难以维护, 因为无论在全局哪一个地方更改全局变量的值, 全局变量都会改变. 更糟糕的是如果我们没有使用var关键字进行变量的定义, JavaScript会默认该变量为全局变量, 不管在程序的哪个地方.</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  globle = <span class="number">10</span>;</div><div class="line">&#125;</div><div class="line">test();</div><div class="line"><span class="built_in">console</span>.log(globle)   <span class="comment">//10</span></div></pre></td></tr></table></figure>
-<p>由于globle没有用var关键字修饰, JavaScript会把globle当成全局变量, 导致在函数外也可以使用. 这是一个非常糟糕的设计, 因此生名变量时, 一定要在前面加关键字 var. </p>
+<p>由于globle没有用var关键字修饰, JavaScript会把globle当成全局变量, 导致在函数外也可以使用. 这是一个非常糟糕的设计, 因此声名变量时, 一定要在前面加关键字 var. </p>
 </li>
 <li><p>作用域</p>
 <p>JavaScript与C语言类似, 都是用{}来表示代码块. 但糟糕的是, 与C语言不同, JavaScript没有提供相应的块级作用域, 也就是说, 代码块中生命的变量在包含此码块的函数的任何位置都是可见的, 听起来十分拗口, 举个例子就好懂多了. </p>
@@ -96,7 +155,7 @@
 <p>for循环中的变量 g 是属于块级代码, 但在全局中却可以调用. 这就是 js 的作用域问题, 与之相对的是C语言的块级作用域. 先看以下代码</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</div><div class="line">   <span class="keyword">int</span> i = <span class="number">2</span>;</div><div class="line">   <span class="keyword">if</span> (i)&#123;</div><div class="line">   <span class="keyword">int</span> j = <span class="number">10</span>;</div><div class="line">&#125;</div><div class="line"><span class="built_in">printf</span>(j);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>运行这段代码, 编译器会报错. error: ‘j’ was not declared in this scope. 这是由于j是在块级作用域if语句里面的. 所以在全局中式无法使用的. </p>
-<p>因此在JavaScript中要注意这一点, 由于js的这个特性, 我们最好在每个函数的开头部分就生命所有的变量.</p>
+<p>因此在JavaScript中要注意这一点, 由于js的这个特性, 我们最好在每个函数的开头部分就声明所有的变量.</p>
 </li>
 <li><p>自动插入分号</p>
 <p>JavaScript并不强制使用 分号 作为一个语句的结尾, 但当你忘记在语句中使用 分号做为结尾时, 它会自动插入分号来试图修正程序. 注意了, 这个特性可能会出现一些神奇的问题. 例如以下的 return 语句.</p>
@@ -130,23 +189,23 @@
 <p>第一次看到这个结果的时候我也吓了一跳，但其实原因很简单，因为CPU的计算其实都是二进制的，而二进制的浮点数不能正确的处理十进制的小数点，说以会导致计算结果不精准，这不仅是JavaScript的问题，很多编程语言也有同样的问题，例如Python，Java．幸运地是，整数是可以完美处理的．对于有小数点的运算，我们可以指定计算精度来避免这样的问题．</p>
 </li>
 <li><p>NaN</p>
-<p>不得不说这是JavaScript中一个奇葩的变量类型，它表示一个特殊的数量值，它不代表一个数字，当数学表达式无法计算时会用ＮａＮ表示，亦或者把非数字形式的字符串转换成数字时．但</p>
+<p>不得不说这是JavaScript中一个奇葩的变量类型，它表示一个特殊的数量值，它不代表一个数字，当数学表达式无法计算时会用NaN表示，亦或者把非数字形式的字符串转换成数字时．但</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typeof</span> <span class="literal">NaN</span> === <span class="string">'number'</span>; <span class="comment">// true</span></div></pre></td></tr></table></figure>
 <p>也就是说typeof 是无法辨认数字与NaN的（typeof要你有何用！），更恶心的是</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="literal">NaN</span> === <span class="literal">NaN</span>; <span class="comment">// false</span></div></pre></td></tr></table></figure>
-<p>真的无话可说，发明ＮａＮ这个变量绝对是设计者脑抽了．要判断一个变量只能用一个方法；</p>
+<p>真的无话可说，发明NaN这个关键字绝对是设计者脑抽了．要判断一个变量只能用一个方法；</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">isNaN</span>(<span class="literal">NaN</span>); <span class="comment">//true</span></div></pre></td></tr></table></figure>
 <p>延伸一下，由于上面的问题，我们是无法直接用 typeof 方法来判断一个变量是不是数字的．千万要注意，别掉坑里了，我们可以加一个判断．</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typeof</span> value === <span class="string">'number'</span> &amp;&amp; <span class="built_in">isFinite</span>(value);</div></pre></td></tr></table></figure>
 </li>
 <li><p>数组</p>
-<p>JavaScript 中没有真正的数组，JavaScript 中没有真正的数组，JavaScript 中没有真正的数组．重要的事情说三遍．在　JavaScript 中，一切皆为对象，数组其实是一个有length的对象．这并不都是坏事，由于这个特性，你不必给数组设置维度，也不用担心越界错误（但其实这更容易导致出现隐藏的ｂｕｇ）．但这也导致其性能下降的厉害．同理的，你也无法用typeof直接判断一个变量是否为数组（typeof要你有何用！！），你需要检查一个名作constructor的属性．</p>
+<p>JavaScript 中没有真正的数组，JavaScript 中没有真正的数组，JavaScript 中没有真正的数组．重要的事情说三遍．在JavaScript中，一切皆为对象，数组其实是一个有length的对象．这并不都是坏事，由于这个特性，你不必给数组设置维度，也不用担心越界错误（但其实这更容易导致出现隐藏的ｂｕｇ）．但这也导致其性能下降的厉害．同理的，你也无法用typeof直接判断一个变量是否为数组（typeof要你有何用！！），你需要检查一个名作constructor的属性．</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typeof</span> value === <span class="string">'object'</span> &amp;&amp; value.constructor === <span class="built_in">Array</span>;</div></pre></td></tr></table></figure>
 </li>
 <li><p>对象</p>
 <p>是的，JavaScript 的对象也是要我们注意的．与Python, Java　不同，JavaScript 中的对象不是通过类来定义的，而是通过原型链．因此，当你创建一个空对象时，该对象绝对不是空的，而是包含了从上一级中继承下来的各种方法与属性，这在有时候会导致问题变得很麻烦．举个例子，你现在在做一个文本分析脚本，首先需要统计一篇文章中每个单词出现的个数，这个时候就要十分小心了．先看下面的代码．</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> text = <span class="string">"To deal with this, you can generate a stack trace in the constructor of the exception object during the throw exception statement. "</span>;</div><div class="line"><span class="keyword">var</span> words = text.toLowerCase().split(<span class="regexp">/[\s,.]+/</span>)</div><div class="line"><span class="keyword">var</span> count = &#123;&#125;;</div><div class="line"><span class="keyword">var</span> word;</div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;words.length;i++)&#123;</div><div class="line">  word = words[i];</div><div class="line">  <span class="keyword">if</span> (count[word])&#123;</div><div class="line">    count[word] += <span class="number">1</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">else</span>&#123;</div><div class="line">    count[word] = <span class="number">1</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>上面的代码很简单，就是统计一下每个单词出现的次数，但如果查看 count.constructor,你会发现 输出了这个鬼东西：”function Object() { [native code] }1”，原因就是上面所说的，count对象继承自Ｏbject.prototype．而Ｏbject.prototype 中包含着一个constructor的对象．如何避免这个问题呢，我们可以做一个判断，检测成员类型，是数字才进行处理．</p>
+<p>上面的代码很简单，就是统计一下每个单词出现的次数，但如果查看 count.constructor,你会发现 输出了这个鬼东西：”function Object() { [native code] }1”，原因就是上面所说的. count对象继承自Object.prototype．而Ｏbject.prototype 中包含着一个constructor的对象．如何避免这个问题呢，我们可以做一个判断，检测成员类型，是数字才进行处理．</p>
 </li>
 <li><p>其他</p>
 <p>接下来的东西就不细讲了，都是不建议使用的．</p>
